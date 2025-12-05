@@ -9,25 +9,24 @@ import (
 
 func init() {
 	RegisterCommand(SpecialCommandRegistry{
-		Cmd: "\\l",
-		Alias: []string{"\\list"},
-		Description: "List Databases",
-		Syntax:  "\\l[+] [pattern]",
-		Handler: ListDatabases,
+		Cmd:           "\\l",
+		Alias:         []string{"\\list"},
+		Description:   "List Databases",
+		Syntax:        "\\l[+] [pattern]",
+		Handler:       ListDatabases,
 		CaseSensitive: true,
 	})
 
 	RegisterCommand(SpecialCommandRegistry{
-		Cmd: "\\dt",
+		Cmd:    "\\dt",
 		Syntax: "\\dt[+] [pattern]",
 		Handler: func(ctx context.Context, db DB, pattern string, verbose bool) (*Result, error) {
 			return ListObjects(ctx, db, pattern, verbose, []string{"r", "p"})
 		},
-		Description: "List Tables",
+		Description:   "List Tables",
 		CaseSensitive: true,
 	})
 }
-
 
 func sqlNamePattern(pattern string) (schema, table string) {
 	inQuotes := false
@@ -118,7 +117,7 @@ func ListDatabases(ctx context.Context, db DB, pattern string, verbose bool) (*R
 		if tablePattern != "" {
 			args = append(args, tablePattern)
 		}
-			sb.WriteString("\nWHERE d.datname ~ $" + strconv.Itoa(argIndex) + " ")
+		sb.WriteString("\nWHERE d.datname ~ $" + strconv.Itoa(argIndex) + " ")
 	}
 
 	sb.WriteString("\nORDER BY 1;")
@@ -126,7 +125,7 @@ func ListDatabases(ctx context.Context, db DB, pattern string, verbose bool) (*R
 	if err != nil {
 		return nil, err
 	}
-	
+
 	res := &Result{
 		Title:   "DATABASES",
 		Rows:    rows,
@@ -289,7 +288,7 @@ func ListRoles(ctx context.Context, db DB, pattern string, verbose bool) (*Resul
 
 	if verbose {
 		sb.WriteString("pg_catalog.shobj_description(r.oid, 'pg_authid') AS description, ")
-	} 
+	}
 	sb.WriteString(`
 	 	r.rolreplication
 			FROM pg_catalog.pg_roles r
@@ -302,7 +301,7 @@ func ListRoles(ctx context.Context, db DB, pattern string, verbose bool) (*Resul
 			args = append(args, tablePattern)
 		}
 	}
-	
+
 	sb.WriteString(" ORDER BY 1;")
 	rows, err := db.Query(ctx, sb.String(), args...)
 	if err != nil {
@@ -315,10 +314,9 @@ func ListRoles(ctx context.Context, db DB, pattern string, verbose bool) (*Resul
 		Columns: rows.FieldDescriptions(),
 		Status:  "OKAY",
 	}
-	
+
 	return res, nil
 }
-
 
 func ListDefaultPrivileges(ctx context.Context, db DB, pattern string, verbose bool) (*Result, error) {
 	var sb strings.Builder
@@ -366,7 +364,6 @@ func ListTablespaces(ctx context.Context, db DB, pattern string, verbose bool) (
 	args := []any{}
 	argIndex := 1
 
-
 	var isLocationSupported bool
 	rows := db.QueryRow(ctx, `
 	  SELECT EXISTS (
@@ -413,16 +410,14 @@ func ListTablespaces(ctx context.Context, db DB, pattern string, verbose bool) (
 		Columns: rowsResult.FieldDescriptions(),
 		Status:  "OKAY",
 	}
-	return res, nil	
+	return res, nil
 
 }
-
 
 func ListObjects(ctx context.Context, db DB, pattern string, verbose bool, relkinds []string) (*Result, error) {
 	var sb strings.Builder
 	args := []any{}
 	argIndex := 1
-
 
 	schemaRe, tableRe := sqlNamePattern(pattern)
 
@@ -455,7 +450,6 @@ func ListObjects(ctx context.Context, db DB, pattern string, verbose bool, relki
 	args = append(args, relkinds)
 	argIndex++
 
-
 	if schemaRe != "" {
 		sb.WriteString("  AND n.nspname ~ $" + strconv.Itoa(argIndex) + "\n")
 		args = append(args, schemaRe)
@@ -476,7 +470,6 @@ func ListObjects(ctx context.Context, db DB, pattern string, verbose bool, relki
 
 	sb.WriteString("ORDER BY 1, 2;")
 
-
 	rows, err := db.Query(ctx, sb.String(), args...)
 	if err != nil {
 		return nil, err
@@ -488,5 +481,5 @@ func ListObjects(ctx context.Context, db DB, pattern string, verbose bool, relki
 		Columns: rows.FieldDescriptions(),
 		Status:  "OKAY",
 	}
-	return res, nil		
+	return res, nil
 }
