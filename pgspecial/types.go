@@ -30,7 +30,7 @@ type SpecialCommand struct {
 
 type SpecialCommandRegistry struct {
 	Cmd          string
-	Alias         string
+	Alias         []string
 	Syntax        string
 	Description   string
 	Handler       SpecialHandler
