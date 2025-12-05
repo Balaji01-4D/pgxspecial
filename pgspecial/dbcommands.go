@@ -7,6 +7,28 @@ import (
 	"strings"
 )
 
+func init() {
+	RegisterCommand(SpecialCommandRegistry{
+		Cmd: "\\l",
+		Alias: []string{"\\list"},
+		Description: "List Databases",
+		Syntax:  "\\l[+] [pattern]",
+		Handler: ListDatabases,
+		CaseSensitive: true,
+	})
+
+	RegisterCommand(SpecialCommandRegistry{
+		Cmd: "\\dt",
+		Syntax: "\\dt[+] [pattern]",
+		Handler: func(ctx context.Context, db DB, pattern string, verbose bool) (*Result, error) {
+			return ListObjects(ctx, db, pattern, verbose, []string{"r", "p"})
+		},
+		Description: "List Tables",
+		CaseSensitive: true,
+	})
+}
+
+
 func sqlNamePattern(pattern string) (schema, table string) {
 	inQuotes := false
 	var buf strings.Builder
