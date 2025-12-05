@@ -94,9 +94,9 @@ func ListDatabases(ctx context.Context, db DB, pattern string, verbose bool) (*R
 		_, tablePattern := sqlNamePattern(pattern)
 
 		if tablePattern != "" {
-			sb.WriteString("\nWHERE d.datname ~ $" + strconv.Itoa(argIndex) + " ")
 			args = append(args, tablePattern)
 		}
+			sb.WriteString("\nWHERE d.datname ~ $" + strconv.Itoa(argIndex) + " ")
 	}
 
 	sb.WriteString("\nORDER BY 1;")
@@ -393,4 +393,78 @@ func ListTablespaces(ctx context.Context, db DB, pattern string, verbose bool) (
 	}
 	return res, nil	
 
+}
+
+
+func ListObjects(ctx context.Context, db DB, pattern string, verbose bool, relkinds []string) (*Result, error) {
+	var sb strings.Builder
+	args := []any{}
+	argIndex := 1
+
+
+	schemaRe, tableRe := sqlNamePattern(pattern)
+
+	sb.WriteString(
+		`SELECT n.nspname as schema,
+                    c.relname as name,
+                    CASE c.relkind
+                      WHEN 'r' THEN 'table' WHEN 'v' THEN 'view'
+                      WHEN 'p' THEN 'partitioned table'
+                      WHEN 'm' THEN 'materialized view' WHEN 'i' THEN 'index'
+                      WHEN 'S' THEN 'sequence' WHEN 's' THEN 'special'
+                      WHEN 'f' THEN 'foreign table' END
+                    as type,
+                    pg_catalog.pg_get_userbyid(c.relowner) as owner
+	`)
+
+	if verbose {
+		sb.WriteString(`
+		 ,pg_catalog.pg_size_pretty(pg_catalog.pg_table_size(c.oid)) as size,
+            pg_catalog.obj_description(c.oid, 'pg_class') as description 
+	`)
+	}
+
+	sb.WriteString(`
+	FROM pg_catalog.pg_class c
+	LEFT JOIN pg_catalog.pg_namespace n
+	ON n.oid = c.relnamespace
+	WHERE c.relkind = ANY($` + strconv.Itoa(argIndex) + `)
+	`)
+	args = append(args, relkinds)
+	argIndex++
+
+
+	if schemaRe != "" {
+		sb.WriteString("  AND n.nspname ~ $" + strconv.Itoa(argIndex) + "\n")
+		args = append(args, schemaRe)
+		argIndex++
+	} else {
+		sb.WriteString(`
+		AND n.nspname <> 'pg_catalog'
+		AND n.nspname <> 'information_schema'
+		AND n.nspname !~ '^pg_toast'
+		AND pg_catalog.pg_table_is_visible(c.oid)
+		`)
+	}
+
+	if tableRe != "" {
+		sb.WriteString("  AND c.relname ~ $" + strconv.Itoa(argIndex) + "\n")
+		args = append(args, tableRe)
+	}
+
+	sb.WriteString("ORDER BY 1, 2;")
+
+
+	rows, err := db.Query(ctx, sb.String(), args...)
+	if err != nil {
+		return nil, err
+	}
+
+	res := &Result{
+		Title:   "Objects",
+		Rows:    rows,
+		Columns: rows.FieldDescriptions(),
+		Status:  "OKAY",
+	}
+	return res, nil		
 }
