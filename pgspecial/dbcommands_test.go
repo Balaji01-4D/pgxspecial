@@ -20,35 +20,35 @@ func connectTestDB(t *testing.T) pgspecial.DB {
 	if err != nil {
 		t.Fatalf("Failed to connect to database: %v", err)
 	}
-	return db	
+	return db
 }
 
 func RowsToMaps(rows pgx.Rows) ([]map[string]interface{}, error) {
-    cols := rows.FieldDescriptions()
-    colCount := len(cols)
+	cols := rows.FieldDescriptions()
+	colCount := len(cols)
 
-    var result []map[string]interface{}
+	var result []map[string]interface{}
 
-    for rows.Next() {
-        values := make([]interface{}, colCount)
-        scanArgs := make([]interface{}, colCount)
-        for i := range values {
-            scanArgs[i] = &values[i]
-        }
+	for rows.Next() {
+		values := make([]interface{}, colCount)
+		scanArgs := make([]interface{}, colCount)
+		for i := range values {
+			scanArgs[i] = &values[i]
+		}
 
-        if err := rows.Scan(scanArgs...); err != nil {
-            return nil, err
-        }
+		if err := rows.Scan(scanArgs...); err != nil {
+			return nil, err
+		}
 
-        m := make(map[string]interface{})
-        for i, fd := range cols {
-            m[string(fd.Name)] = values[i]
-        }
+		m := make(map[string]interface{})
+		for i, fd := range cols {
+			m[string(fd.Name)] = values[i]
+		}
 
-        result = append(result, m)
-    }
+		result = append(result, m)
+	}
 
-    return result, rows.Err()
+	return result, rows.Err()
 }
 
 func getColumnNames(fds []pgconn.FieldDescription) []string {
@@ -60,29 +60,29 @@ func getColumnNames(fds []pgconn.FieldDescription) []string {
 }
 
 func containsDB(rows []map[string]interface{}, name string) bool {
-    for _, r := range rows {
-        if n, ok := r["name"].(string); ok && n == name {
-            return true
-        }
-    }
-    return false
+	for _, r := range rows {
+		if n, ok := r["name"].(string); ok && n == name {
+			return true
+		}
+	}
+	return false
 }
 
 func containsByField(rows []map[string]interface{}, field, expected string) bool {
-    for _, row := range rows {
-        v := row[field]
-        switch x := v.(type) {
-        case string:
-            if x == expected {
-                return true
-            }
-        case []byte:
-            if string(x) == expected {
-                return true
-            }
-        }
-    }
-    return false
+	for _, row := range rows {
+		v := row[field]
+		switch x := v.(type) {
+		case string:
+			if x == expected {
+				return true
+			}
+		case []byte:
+			if string(x) == expected {
+				return true
+			}
+		}
+	}
+	return false
 }
 
 func TestListDatabases(t *testing.T) {
@@ -317,10 +317,10 @@ func TestListRoles(t *testing.T) {
 	}
 
 	var essentialDefaultRoles = []string{
-    "postgres",
-    "pg_monitor",
-    "pg_read_all_data",
-    "pg_write_all_data",
+		"postgres",
+		"pg_monitor",
+		"pg_read_all_data",
+		"pg_write_all_data",
 	}
 
 	for _, role := range essentialDefaultRoles {
@@ -367,8 +367,8 @@ func TestListRolesWithPattern(t *testing.T) {
 	}
 	assert.Len(t, allRows, 2)
 	var expectedRoles = []string{
-	"pg_write_all_data",
-	"pg_write_server_files",
+		"pg_write_all_data",
+		"pg_write_server_files",
 	}
 	for _, role := range expectedRoles {
 		assert.True(t, containsByField(allRows, "rolname", role), "Expected role %s not found", role)
@@ -455,14 +455,13 @@ func TestListRolesWithPatternVerbose(t *testing.T) {
 	}
 	assert.Len(t, allRows, 2)
 	var expectedRoles = []string{
-	"pg_write_all_data",
-	"pg_write_server_files",
+		"pg_write_all_data",
+		"pg_write_server_files",
 	}
 	for _, role := range expectedRoles {
 		assert.True(t, containsByField(allRows, "rolname", role), "Expected role %s not found", role)
 	}
 }
-
 
 func TestListRolesWithNoMatchingPatternVerbose(t *testing.T) {
 	db := connectTestDB(t)
@@ -504,7 +503,6 @@ func TestListRolesWithNoMatchingPatternVerbose(t *testing.T) {
 	}
 	assert.Len(t, allRows, 0, "Expected no roles matching the pattern")
 }
-
 
 func TestListTablespaces(t *testing.T) {
 	db := connectTestDB(t)
