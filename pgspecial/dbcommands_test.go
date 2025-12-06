@@ -227,9 +227,9 @@ func TestListDatabases(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ListDatabases failed: %v", err)
 	}
-	defer result.Rows.Close()
+	defer result.Close()
 
-	fds := result.Columns
+	fds := result.FieldDescriptions()
 	assert.NotNil(t, fds)
 
 	columnsExpected := []string{
@@ -245,7 +245,7 @@ func TestListDatabases(t *testing.T) {
 	assert.Len(t, fds, 6)
 
 	var allRows []map[string]interface{}
-	allRows, err = RowsToMaps(result.Rows)
+	allRows, err = RowsToMaps(result)
 	if err != nil {
 		t.Fatalf("Failed to read rows: %v", err)
 	}
@@ -265,9 +265,9 @@ func TestListDatabasesVerbose(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ListDatabases failed: %v", err)
 	}
-	defer result.Rows.Close()
+	defer result.Close()
 
-	fds := result.Columns
+	fds := result.FieldDescriptions()
 	assert.NotNil(t, fds)
 
 	columnsExpected := []string{
@@ -286,7 +286,7 @@ func TestListDatabasesVerbose(t *testing.T) {
 	assert.Len(t, fds, 9)
 
 	var allRows []map[string]interface{}
-	allRows, err = RowsToMaps(result.Rows)
+	allRows, err = RowsToMaps(result)
 	if err != nil {
 		t.Fatalf("Failed to read rows: %v", err)
 	}
@@ -306,9 +306,9 @@ func TestListDatabaseWithExactPattern(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ListDatabases failed: %v", err)
 	}
-	defer result.Rows.Close()
+	defer result.Close()
 
-	fds := result.Columns
+	fds := result.FieldDescriptions()
 	assert.NotNil(t, fds)
 
 	columnsExpected := []string{
@@ -324,7 +324,7 @@ func TestListDatabaseWithExactPattern(t *testing.T) {
 	assert.Len(t, fds, 6)
 
 	var allRows []map[string]interface{}
-	allRows, err = RowsToMaps(result.Rows)
+	allRows, err = RowsToMaps(result)
 	if err != nil {
 		t.Fatalf("Failed to read rows: %v", err)
 	}
@@ -345,9 +345,9 @@ func TestListDatabaseWithPattern(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ListDatabases failed: %v", err)
 	}
-	defer result.Rows.Close()
+	defer result.Close()
 
-	fds := result.Columns
+	fds := result.FieldDescriptions()
 	assert.NotNil(t, fds)
 
 	columnsExpected := []string{
@@ -363,7 +363,7 @@ func TestListDatabaseWithPattern(t *testing.T) {
 	assert.Len(t, fds, 6)
 
 	var allRows []map[string]interface{}
-	allRows, err = RowsToMaps(result.Rows)
+	allRows, err = RowsToMaps(result)
 	if err != nil {
 		t.Fatalf("Failed to read rows: %v", err)
 	}
@@ -384,9 +384,9 @@ func TestListDatabaseWithNoMatchingPattern(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ListDatabases failed: %v", err)
 	}
-	defer result.Rows.Close()
+	defer result.Close()
 
-	fds := result.Columns
+	fds := result.FieldDescriptions()
 	assert.NotNil(t, fds)
 
 	columnsExpected := []string{
@@ -402,7 +402,7 @@ func TestListDatabaseWithNoMatchingPattern(t *testing.T) {
 	assert.Len(t, fds, 6)
 
 	var allRows []map[string]interface{}
-	allRows, err = RowsToMaps(result.Rows)
+	allRows, err = RowsToMaps(result)
 	if err != nil {
 		t.Fatalf("Failed to read rows: %v", err)
 	}
@@ -420,9 +420,9 @@ func TestListRoles(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ListRoles failed: %v", err)
 	}
-	defer result.Rows.Close()
+	defer result.Close()
 
-	fds := result.Columns
+	fds := result.FieldDescriptions()
 	assert.NotNil(t, fds)
 
 	columnsExpected := []string{
@@ -442,7 +442,7 @@ func TestListRoles(t *testing.T) {
 	assert.Len(t, fds, 10)
 
 	var allRows []map[string]interface{}
-	allRows, err = RowsToMaps(result.Rows)
+	allRows, err = RowsToMaps(result)
 	if err != nil {
 		t.Fatalf("Failed to read rows: %v", err)
 	}
@@ -470,9 +470,9 @@ func TestListRolesWithPattern(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ListRoles failed: %v", err)
 	}
-	defer result.Rows.Close()
+	defer result.Close()
 
-	fds := result.Columns
+	fds := result.FieldDescriptions()
 	assert.NotNil(t, fds)
 
 	columnsExpected := []string{
@@ -492,7 +492,7 @@ func TestListRolesWithPattern(t *testing.T) {
 	assert.Len(t, fds, 10)
 
 	var allRows []map[string]interface{}
-	allRows, err = RowsToMaps(result.Rows)
+	allRows, err = RowsToMaps(result)
 	if err != nil {
 		t.Fatalf("Failed to read rows: %v", err)
 	}
@@ -517,9 +517,9 @@ func TestListRolesWithNoMatchingPattern(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ListRoles failed: %v", err)
 	}
-	defer result.Rows.Close()
+	defer result.Close()
 
-	fds := result.Columns
+	fds := result.FieldDescriptions()
 	assert.NotNil(t, fds)
 
 	columnsExpected := []string{
@@ -539,7 +539,7 @@ func TestListRolesWithNoMatchingPattern(t *testing.T) {
 	assert.Len(t, fds, 10)
 
 	var allRows []map[string]interface{}
-	allRows, err = RowsToMaps(result.Rows)
+	allRows, err = RowsToMaps(result)
 	if err != nil {
 		t.Fatalf("Failed to read rows: %v", err)
 	}
@@ -557,9 +557,9 @@ func TestListRolesWithPatternVerbose(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ListRoles failed: %v", err)
 	}
-	defer result.Rows.Close()
+	defer result.Close()
 
-	fds := result.Columns
+	fds := result.FieldDescriptions()
 	assert.NotNil(t, fds)
 
 	columnsExpected := []string{
@@ -580,7 +580,7 @@ func TestListRolesWithPatternVerbose(t *testing.T) {
 	assert.Len(t, fds, 11)
 
 	var allRows []map[string]interface{}
-	allRows, err = RowsToMaps(result.Rows)
+	allRows, err = RowsToMaps(result)
 	if err != nil {
 		t.Fatalf("Failed to read rows: %v", err)
 	}
@@ -605,9 +605,9 @@ func TestListRolesWithNoMatchingPatternVerbose(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ListRoles failed: %v", err)
 	}
-	defer result.Rows.Close()
+	defer result.Close()
 
-	fds := result.Columns
+	fds := result.FieldDescriptions()
 	assert.NotNil(t, fds)
 
 	columnsExpected := []string{
@@ -628,7 +628,7 @@ func TestListRolesWithNoMatchingPatternVerbose(t *testing.T) {
 	assert.Len(t, fds, 11)
 
 	var allRows []map[string]interface{}
-	allRows, err = RowsToMaps(result.Rows)
+	allRows, err = RowsToMaps(result)
 	if err != nil {
 		t.Fatalf("Failed to read rows: %v", err)
 	}
@@ -646,9 +646,9 @@ func TestListTablespaces(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ListTablespaces failed: %v", err)
 	}
-	defer result.Rows.Close()
+	defer result.Close()
 
-	fds := result.Columns
+	fds := result.FieldDescriptions()
 	assert.NotNil(t, fds)
 
 	columnsExpected := []string{
@@ -662,7 +662,7 @@ func TestListTablespaces(t *testing.T) {
 	assert.Len(t, fds, 3)
 
 	var allRows []map[string]interface{}
-	allRows, err = RowsToMaps(result.Rows)
+	allRows, err = RowsToMaps(result)
 	if err != nil {
 		t.Fatalf("Failed to read rows: %v", err)
 	}
@@ -681,9 +681,9 @@ func TestListTablespacesWithPattern(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ListTablespaces failed: %v", err)
 	}
-	defer result.Rows.Close()
+	defer result.Close()
 
-	fds := result.Columns
+	fds := result.FieldDescriptions()
 	assert.NotNil(t, fds)
 
 	columnsExpected := []string{
@@ -697,7 +697,7 @@ func TestListTablespacesWithPattern(t *testing.T) {
 	assert.Len(t, fds, 3)
 
 	var allRows []map[string]interface{}
-	allRows, err = RowsToMaps(result.Rows)
+	allRows, err = RowsToMaps(result)
 	if err != nil {
 		t.Fatalf("Failed to read rows: %v", err)
 	}
@@ -717,9 +717,9 @@ func TestListTablespacesWithInvalidPattern(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ListTablespaces failed: %v", err)
 	}
-	defer result.Rows.Close()
+	defer result.Close()
 
-	fds := result.Columns
+	fds := result.FieldDescriptions()
 	assert.NotNil(t, fds)
 
 	columnsExpected := []string{
@@ -733,7 +733,7 @@ func TestListTablespacesWithInvalidPattern(t *testing.T) {
 	assert.Len(t, fds, 3)
 
 	var allRows []map[string]interface{}
-	allRows, err = RowsToMaps(result.Rows)
+	allRows, err = RowsToMaps(result)
 	if err != nil {
 		t.Fatalf("Failed to read rows: %v", err)
 	}
@@ -760,9 +760,9 @@ func TestListForeignTables(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ListForeignTables failed: %v", err)
 	}
-	defer result.Rows.Close()
+	defer result.Close()
 
-	fds := result.Columns
+	fds := result.FieldDescriptions()
 	assert.NotNil(t, fds)
 
 	columnsExpected := []string{
@@ -776,7 +776,7 @@ func TestListForeignTables(t *testing.T) {
 	assert.Len(t, fds, 4)
 
 	var allRows []map[string]interface{}
-	allRows, err = RowsToMaps(result.Rows)
+	allRows, err = RowsToMaps(result)
 	if err != nil {
 		t.Fatalf("Failed to read rows: %v", err)
 	}
@@ -804,9 +804,9 @@ func TestListForeignTablesWithPattern(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ListForeignTables failed: %v", err)
 	}
-	defer result.Rows.Close()
+	defer result.Close()
 
-	fds := result.Columns
+	fds := result.FieldDescriptions()
 	assert.NotNil(t, fds)
 
 	columnsExpected := []string{
@@ -820,7 +820,7 @@ func TestListForeignTablesWithPattern(t *testing.T) {
 	assert.Len(t, fds, 4)
 
 	var allRows []map[string]interface{}
-	allRows, err = RowsToMaps(result.Rows)
+	allRows, err = RowsToMaps(result)
 	if err != nil {
 		t.Fatalf("Failed to read rows: %v", err)
 	}
@@ -845,9 +845,9 @@ func TestListForeignTablesWithNoMatchingPattern(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ListForeignTables failed: %v", err)
 	}
-	defer result.Rows.Close()
+	defer result.Close()
 
-	fds := result.Columns
+	fds := result.FieldDescriptions()
 	assert.NotNil(t, fds)
 
 	columnsExpected := []string{
@@ -861,7 +861,7 @@ func TestListForeignTablesWithNoMatchingPattern(t *testing.T) {
 	assert.Len(t, fds, 4)
 
 	var allRows []map[string]interface{}
-	allRows, err = RowsToMaps(result.Rows)
+	allRows, err = RowsToMaps(result)
 	if err != nil {
 		t.Fatalf("Failed to read rows: %v", err)
 	}
@@ -886,9 +886,9 @@ func TestListForeignTablesVerbose(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ListForeignTables failed: %v", err)
 	}
-	defer result.Rows.Close()
+	defer result.Close()
 
-	fds := result.Columns
+	fds := result.FieldDescriptions()
 	assert.NotNil(t, fds)
 
 	columnsExpected := []string{
@@ -904,7 +904,7 @@ func TestListForeignTablesVerbose(t *testing.T) {
 	assert.Len(t, fds, 6)
 
 	var allRows []map[string]interface{}
-	allRows, err = RowsToMaps(result.Rows)
+	allRows, err = RowsToMaps(result)
 	if err != nil {
 		t.Fatalf("Failed to read rows: %v", err)
 	}
@@ -929,9 +929,9 @@ func TestListForeignTablesVerboseWithPattern(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ListForeignTables failed: %v", err)
 	}
-	defer result.Rows.Close()
+	defer result.Close()
 
-	fds := result.Columns
+	fds := result.FieldDescriptions()
 	assert.NotNil(t, fds)
 
 	columnsExpected := []string{
@@ -947,7 +947,7 @@ func TestListForeignTablesVerboseWithPattern(t *testing.T) {
 	assert.Len(t, fds, 6)
 
 	var allRows []map[string]interface{}
-	allRows, err = RowsToMaps(result.Rows)
+	allRows, err = RowsToMaps(result)
 	if err != nil {
 		t.Fatalf("Failed to read rows: %v", err)
 	}
@@ -972,9 +972,9 @@ func TestListForeignTablesVerboseWithNoMatchingPattern(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ListForeignTables failed: %v", err)
 	}
-	defer result.Rows.Close()
+	defer result.Close()
 
-	fds := result.Columns
+	fds := result.FieldDescriptions()
 	assert.NotNil(t, fds)
 
 	columnsExpected := []string{
@@ -990,7 +990,7 @@ func TestListForeignTablesVerboseWithNoMatchingPattern(t *testing.T) {
 	assert.Len(t, fds, 6)
 
 	var allRows []map[string]interface{}
-	allRows, err = RowsToMaps(result.Rows)
+	allRows, err = RowsToMaps(result)
 	if err != nil {
 		t.Fatalf("Failed to read rows: %v", err)
 	}
@@ -1016,9 +1016,9 @@ func TestListDatatypes(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ListDatatypes failed: %v", err)
 	}
-	defer result.Rows.Close()
+	defer result.Close()
 
-	fds := result.Columns
+	fds := result.FieldDescriptions()
 	assert.NotNil(t, fds)
 
 	columnsExpected := []string{
@@ -1031,7 +1031,7 @@ func TestListDatatypes(t *testing.T) {
 	assert.Len(t, fds, 3)
 
 	var allRows []map[string]interface{}
-	allRows, err = RowsToMaps(result.Rows)
+	allRows, err = RowsToMaps(result)
 	if err != nil {
 		t.Fatalf("Failed to read rows: %v", err)
 	}
@@ -1059,9 +1059,9 @@ func TestListDatatypesWithPattern(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ListDatatypes failed: %v", err)
 	}
-	defer result.Rows.Close()
+	defer result.Close()
 
-	fds := result.Columns
+	fds := result.FieldDescriptions()
 	assert.NotNil(t, fds)
 
 	columnsExpected := []string{
@@ -1074,7 +1074,7 @@ func TestListDatatypesWithPattern(t *testing.T) {
 	assert.Len(t, fds, 3)
 
 	var allRows []map[string]interface{}
-	allRows, err = RowsToMaps(result.Rows)
+	allRows, err = RowsToMaps(result)
 	if err != nil {
 		t.Fatalf("Failed to read rows: %v", err)
 	}
@@ -1102,9 +1102,9 @@ func TestListDatatypesWithNoMatchingPattern(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ListDatatypes failed: %v", err)
 	}
-	defer result.Rows.Close()
+	defer result.Close()
 
-	fds := result.Columns
+	fds := result.FieldDescriptions()
 	assert.NotNil(t, fds)
 
 	columnsExpected := []string{
@@ -1117,7 +1117,7 @@ func TestListDatatypesWithNoMatchingPattern(t *testing.T) {
 	assert.Len(t, fds, 3)
 
 	var allRows []map[string]interface{}
-	allRows, err = RowsToMaps(result.Rows)
+	allRows, err = RowsToMaps(result)
 	if err != nil {
 		t.Fatalf("Failed to read rows: %v", err)
 	}
@@ -1143,9 +1143,9 @@ func TestListDatatypesVerbose(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ListDatatypes failed: %v", err)
 	}
-	defer result.Rows.Close()
+	defer result.Close()
 
-	fds := result.Columns
+	fds := result.FieldDescriptions()
 	assert.NotNil(t, fds)
 
 	expectedColumns := []string{
@@ -1161,7 +1161,7 @@ func TestListDatatypesVerbose(t *testing.T) {
 	// expecting 7 columns
 	assert.Len(t, fds, 7)
 	var allRows []map[string]interface{}
-	allRows, err = RowsToMaps(result.Rows)
+	allRows, err = RowsToMaps(result)
 	if err != nil {
 		t.Fatalf("Failed to read rows: %v", err)
 	}
@@ -1190,9 +1190,9 @@ func TestListDatatypesVerboseWithPattern(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ListDatatypes failed: %v", err)
 	}
-	defer result.Rows.Close()
+	defer result.Close()
 
-	fds := result.Columns
+	fds := result.FieldDescriptions()
 	assert.NotNil(t, fds)
 
 	expectedColumns := []string{
@@ -1208,7 +1208,7 @@ func TestListDatatypesVerboseWithPattern(t *testing.T) {
 	// expecting 7 columns
 	assert.Len(t, fds, 7)
 	var allRows []map[string]interface{}
-	allRows, err = RowsToMaps(result.Rows)
+	allRows, err = RowsToMaps(result)
 	if err != nil {
 		t.Fatalf("Failed to read rows: %v", err)
 	}
@@ -1234,9 +1234,9 @@ func TestListDatatypesVerboseWithNoMatchingPattern(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ListDatatypes failed: %v", err)
 	}
-	defer result.Rows.Close()
+	defer result.Close()
 
-	fds := result.Columns
+	fds := result.FieldDescriptions()
 	assert.NotNil(t, fds)
 
 	expectedColumns := []string{
@@ -1252,7 +1252,7 @@ func TestListDatatypesVerboseWithNoMatchingPattern(t *testing.T) {
 	// expecting 7 columns
 	assert.Len(t, fds, 7)
 	var allRows []map[string]interface{}
-	allRows, err = RowsToMaps(result.Rows)
+	allRows, err = RowsToMaps(result)
 	if err != nil {
 		t.Fatalf("Failed to read rows: %v", err)
 	}
@@ -1278,9 +1278,9 @@ func TestListFunctions(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ListFunctions failed: %v", err)
 	}
-	defer result.Rows.Close()
+	defer result.Close()
 
-	fds := result.Columns
+	fds := result.FieldDescriptions()
 	assert.NotNil(t, fds)
 
 	columnsExpected := []string{
@@ -1295,7 +1295,7 @@ func TestListFunctions(t *testing.T) {
 	assert.Len(t, fds, 5)
 
 	var allRows []map[string]interface{}
-	allRows, err = RowsToMaps(result.Rows)
+	allRows, err = RowsToMaps(result)
 	if err != nil {
 		t.Fatalf("Failed to read rows: %v", err)
 	}
@@ -1322,9 +1322,9 @@ func TestListFunctionsWithPattern(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ListFunctions failed: %v", err)
 	}
-	defer result.Rows.Close()
+	defer result.Close()
 
-	fds := result.Columns
+	fds := result.FieldDescriptions()
 	assert.NotNil(t, fds)
 
 	columnsExpected := []string{
@@ -1339,7 +1339,7 @@ func TestListFunctionsWithPattern(t *testing.T) {
 	assert.Len(t, fds, 5)
 
 	var allRows []map[string]interface{}
-	allRows, err = RowsToMaps(result.Rows)
+	allRows, err = RowsToMaps(result)
 	if err != nil {
 		t.Fatalf("Failed to read rows: %v", err)
 	}
@@ -1367,9 +1367,9 @@ func TestListFunctionsWithNoMatchingPattern(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ListFunctions failed: %v", err)
 	}
-	defer result.Rows.Close()
+	defer result.Close()
 
-	fds := result.Columns
+	fds := result.FieldDescriptions()
 	assert.NotNil(t, fds)
 
 	columnsExpected := []string{
@@ -1384,7 +1384,7 @@ func TestListFunctionsWithNoMatchingPattern(t *testing.T) {
 	assert.Len(t, fds, 5)
 
 	var allRows []map[string]interface{}
-	allRows, err = RowsToMaps(result.Rows)
+	allRows, err = RowsToMaps(result)
 	if err != nil {
 		t.Fatalf("Failed to read rows: %v", err)
 	}
@@ -1410,9 +1410,9 @@ func TestListFunctionsVerbose(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ListFunctions failed: %v", err)
 	}
-	defer result.Rows.Close()
+	defer result.Close()
 
-	fds := result.Columns
+	fds := result.FieldDescriptions()
 	assert.NotNil(t, fds)
 
 	columnsExpected := []string{
@@ -1432,7 +1432,7 @@ func TestListFunctionsVerbose(t *testing.T) {
 	assert.Len(t, fds, 10)
 
 	var allRows []map[string]interface{}
-	allRows, err = RowsToMaps(result.Rows)
+	allRows, err = RowsToMaps(result)
 	if err != nil {
 		t.Fatalf("Failed to read rows: %v", err)
 	}
@@ -1460,9 +1460,9 @@ func TestListFunctionsVerboseWithPattern(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ListFunctions failed: %v", err)
 	}
-	defer result.Rows.Close()
+	defer result.Close()
 
-	fds := result.Columns
+	fds := result.FieldDescriptions()
 	assert.NotNil(t, fds)
 
 	columnsExpected := []string{
@@ -1482,7 +1482,7 @@ func TestListFunctionsVerboseWithPattern(t *testing.T) {
 	assert.Len(t, fds, 10)
 
 	var allRows []map[string]interface{}
-	allRows, err = RowsToMaps(result.Rows)
+	allRows, err = RowsToMaps(result)
 	if err != nil {
 		t.Fatalf("Failed to read rows: %v", err)
 	}
@@ -1510,9 +1510,9 @@ func TestListFunctionsVerboseWithNoMatchingPattern(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ListFunctions failed: %v", err)
 	}
-	defer result.Rows.Close()
+	defer result.Close()
 
-	fds := result.Columns
+	fds := result.FieldDescriptions()
 	assert.NotNil(t, fds)
 
 	columnsExpected := []string{
@@ -1532,7 +1532,7 @@ func TestListFunctionsVerboseWithNoMatchingPattern(t *testing.T) {
 	assert.Len(t, fds, 10)
 
 	var allRows []map[string]interface{}
-	allRows, err = RowsToMaps(result.Rows)
+	allRows, err = RowsToMaps(result)
 	if err != nil {
 		t.Fatalf("Failed to read rows: %v", err)
 	}
