@@ -13,13 +13,6 @@ type DB interface {
 	QueryRow(ctx context.Context, sql string, args ...any) pgx.Row
 }
 
-type Result struct {
-	Title   string
-	Rows    pgx.Rows
-	Columns []pgconn.FieldDescription
-	Status  string
-}
-
 type SpecialCommand struct {
 	Cmd           string
 	Syntax        string
