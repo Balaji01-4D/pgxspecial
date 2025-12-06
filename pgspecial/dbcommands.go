@@ -159,7 +159,7 @@ func ListSchemas(ctx context.Context, db DB, pattern string, verbose bool) (pgx.
 
 	if verbose {
 		sb.WriteString(`
-		, pg_catalog.array_to_string(n.nspacl, E'\\n') AS access_privileges, pg_catalog.obj_description(n.oid, 'pg_namespace') AS description
+		, pg_catalog.array_to_string(n.nspacl, E'\n') AS access_privileges, pg_catalog.obj_description(n.oid, 'pg_namespace') AS description
 		`)
 	}
 	sb.WriteString(`FROM pg_catalog.pg_namespace n WHERE n.nspname`)
@@ -173,7 +173,7 @@ func ListSchemas(ctx context.Context, db DB, pattern string, verbose bool) (pgx.
 		}
 	} else {
 		sb.WriteString(`
-		!~ '^pg_' AND n.nspname <> 'information_schema'\n
+		!~ '^pg_' AND n.nspname <> 'information_schema'
 		`)
 	}
 
@@ -245,7 +245,7 @@ func ListPrivileges(ctx context.Context, db DB, pattern string, verbose bool) (p
 			argIndex++
 		}
 		if schema != "" {
-			sb.WriteString(" AND n.nspname OPERATOR(pg_catalog.~) $" + strconv.Itoa(argIndex) + "COLLATE pg_catalog.default ")
+			sb.WriteString(" AND n.nspname OPERATOR(pg_catalog.~) $" + strconv.Itoa(argIndex) + " COLLATE pg_catalog.default ")
 			args = append(args, schema)
 		}
 	} else {
@@ -254,7 +254,6 @@ func ListPrivileges(ctx context.Context, db DB, pattern string, verbose bool) (p
 
 	sb.WriteString("  AND n.nspname !~ '^pg_'")
 	sb.WriteString(" ORDER BY 1, 2")
-	println("final sql\n", sb.String(), args)
 	rows, err := db.Query(ctx, sb.String(), args...)
 	return rows, err
 }
@@ -321,9 +320,6 @@ func ListDefaultPrivileges(ctx context.Context, db DB, pattern string, verbose b
 		args = append(args, fmt.Sprintf("^(%s)$", pattern))
 	}
 	sb.WriteString("ORDER BY 1, 2, 3;")
-
-	fmt.Println(sb.String())
-
 	rows, err := db.Query(ctx, sb.String(), args...)
 	return rows, err
 }
