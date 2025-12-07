@@ -1865,6 +1865,12 @@ func TestListDefaultPrivileges(t *testing.T) {
 
 	pattern := ""
 
+	_, err := db.Exec(context.Background(), "CREATE ROLE app_user")
+	if err != nil {
+		t.Fatalf("Failed to create role: %v", err)
+	}
+	defer db.Exec(context.Background(), "DROP ROLE IF EXISTS app_user")
+	
 	CreateDefaultPrivileges(t, context.Background(), db.(*pgxpool.Pool), "app_user")
 	defer DropDefaultPrivileges(t, context.Background(), db.(*pgxpool.Pool), "app_user")
 	result, err := pgspecial.ListDefaultPrivileges(context.Background(), db, pattern, false)
