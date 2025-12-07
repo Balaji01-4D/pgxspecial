@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	"github.com/balaji01-4d/pgspecial/pgspecial/dbcommands"
+	"github.com/balaji01-4d/pgxspecial/pgspecial/dbcommands"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/stretchr/testify/assert"
 )
@@ -91,8 +91,7 @@ func TestListDomains(t *testing.T) {
 	assert.True(t, containsByField(allRows, "name", "email_domain"))
 }
 
-
-func  TestListDomainsWithPattern(t *testing.T) {
+func TestListDomainsWithPattern(t *testing.T) {
 	db := connectTestDB(t)
 	defer db.(*pgxpool.Pool).Close()
 
@@ -143,7 +142,7 @@ func  TestListDomainsWithPattern(t *testing.T) {
 	assert.True(t, containsByField(allRows, "name", "email_domain"))
 }
 
-func  TestListDomainsWithNoMatchingPattern(t *testing.T) {
+func TestListDomainsWithNoMatchingPattern(t *testing.T) {
 	db := connectTestDB(t)
 	defer db.(*pgxpool.Pool).Close()
 
@@ -189,7 +188,7 @@ func  TestListDomainsWithNoMatchingPattern(t *testing.T) {
 		t.Fatalf("Failed to read rows: %v", err)
 	}
 	assert.Len(t, allRows, 0, "Expected no domains in the result")
-}	
+}
 
 func TestListDomainsVerbose(t *testing.T) {
 	db := connectTestDB(t)
@@ -232,7 +231,7 @@ func TestListDomainsVerbose(t *testing.T) {
 	}
 	assert.Equal(t, expectedColumns, getColumnNames(fds), "Column names do not match expected")
 	// expecting 7 columns
-	assert.Len(t, fds, 7)	
+	assert.Len(t, fds, 7)
 	var allRows []map[string]interface{}
 	allRows, err = RowsToMaps(result)
 	if err != nil {
@@ -244,7 +243,7 @@ func TestListDomainsVerbose(t *testing.T) {
 	assert.True(t, containsByField(allRows, "name", "email_domain"))
 }
 
-func  TestListDomainsVerboseWithPattern(t *testing.T) {
+func TestListDomainsVerboseWithPattern(t *testing.T) {
 	db := connectTestDB(t)
 	defer db.(*pgxpool.Pool).Close()
 
@@ -285,7 +284,7 @@ func  TestListDomainsVerboseWithPattern(t *testing.T) {
 	}
 	assert.Equal(t, expectedColumns, getColumnNames(fds), "Column names do not match expected")
 	// expecting 7 columns
-	assert.Len(t, fds, 7)	
+	assert.Len(t, fds, 7)
 	var allRows []map[string]interface{}
 	allRows, err = RowsToMaps(result)
 	if err != nil {
@@ -297,7 +296,7 @@ func  TestListDomainsVerboseWithPattern(t *testing.T) {
 	assert.True(t, containsByField(allRows, "name", "email_domain"))
 }
 
-func  TestListDomainsVerboseWithNoMatchingPattern(t *testing.T) {
+func TestListDomainsVerboseWithNoMatchingPattern(t *testing.T) {
 	db := connectTestDB(t)
 	defer db.(*pgxpool.Pool).Close()
 
@@ -338,7 +337,7 @@ func  TestListDomainsVerboseWithNoMatchingPattern(t *testing.T) {
 	}
 	assert.Equal(t, expectedColumns, getColumnNames(fds), "Column names do not match expected")
 	// expecting 7 columns
-	assert.Len(t, fds, 7)	
+	assert.Len(t, fds, 7)
 	var allRows []map[string]interface{}
 	allRows, err = RowsToMaps(result)
 	if err != nil {

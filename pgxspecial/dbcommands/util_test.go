@@ -7,7 +7,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/balaji01-4d/pgspecial/pgspecial/database"
+	"github.com/balaji01-4d/pgxspecial/pgspecial/database"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgconn"
 	"github.com/jackc/pgx/v5/pgxpool"

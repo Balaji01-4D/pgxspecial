@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/balaji01-4d/pgspecial/pgspecial/database"
+	"github.com/balaji01-4d/pgxspecial/pgspecial/database"
 	"github.com/jackc/pgx/v5"
 )
 
@@ -51,7 +51,7 @@ func ExecuteSpecialCommand(ctx context.Context, db database.DB, input string) (p
 	fields := strings.Fields(input)
 	cmd := fields[0]
 	args := strings.TrimSpace(strings.TrimPrefix(input, cmd))
-	
+
 	cmd, verbose := checkVerbose(cmd)
 
 	command, ok := command_map[cmd]
@@ -63,5 +63,5 @@ func ExecuteSpecialCommand(ctx context.Context, db database.DB, input string) (p
 	if err != nil {
 		return nil, true, err
 	}
-	return res, true, nil	
+	return res, true, nil
 }

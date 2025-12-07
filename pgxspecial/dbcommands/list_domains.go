@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/balaji01-4d/pgspecial/pgspecial/database"
+	"github.com/balaji01-4d/pgxspecial/pgspecial/database"
 	"github.com/jackc/pgx/v5"
 )
 

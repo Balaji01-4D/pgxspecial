@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/balaji01-4d/pgspecial/pgspecial/dbcommands"
+	"github.com/balaji01-4d/pgxspecial/pgspecial/dbcommands"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
