@@ -632,6 +632,13 @@ func TestListSchemasVerbose(t *testing.T) {
 	pattern := ""
 	verbose := true
 
+	schemaNames := []string{"test_schema1", "test_schema2"}
+	for _, schema := range schemaNames {
+		CreateSchema(t, context.Background(), db.(*pgxpool.Pool), schema)
+		defer DropSchema(t, context.Background(), db.(*pgxpool.Pool), schema)
+	}
+
+
 	result, err := pgspecial.ListSchemas(context.Background(), db, pattern, verbose)
 	if err != nil {
 		t.Fatalf("ListSchemas failed: %v", err)
