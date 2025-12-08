@@ -11,7 +11,7 @@ import (
 
 type SpecialHandler func(ctx context.Context, db database.DB, args string, verbose bool) (pgx.Rows, error)
 
-var command_map = map[string]SpecialCommand{}
+var commandRegistry = map[string]SpecialCommand{}
 
 func RegisterCommand(cmdRegistry SpecialCommandRegistry) {
 
@@ -30,10 +30,10 @@ func RegisterCommand(cmdRegistry SpecialCommandRegistry) {
 		Handler:       cmdRegistry.Handler,
 	}
 
-	command_map[normalize(cmdRegistry.Cmd)] = cmd
+	commandRegistry[normalize(cmdRegistry.Cmd)] = cmd
 
 	for _, alias := range cmdRegistry.Alias {
-		command_map[normalize(alias)] = cmd
+		commandRegistry[normalize(alias)] = cmd
 	}
 
 }
@@ -54,11 +54,10 @@ func ExecuteSpecialCommand(ctx context.Context, db database.DB, input string) (p
 
 	cmd, verbose := checkVerbose(cmd)
 
-	command, ok := command_map[cmd]
+	command, ok := commandRegistry[cmd]
 	if !ok {
 		return nil, true, fmt.Errorf("Unknown Command: %s", cmd)
 	}
-	fmt.Println(cmd, args)
 	res, err := command.Handler(ctx, db, args, verbose)
 	if err != nil {
 		return nil, true, err
