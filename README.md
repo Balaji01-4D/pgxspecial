@@ -1,4 +1,4 @@
-# pgxspecial
+# pgxspecial (NOT PUBLISHED YET)
 
 `pgxspecial` is a Go package that provides an API to execute meta-commands (also known as "special" or "backslash commands") on PostgreSQL, similar to the functionality found in tools like `psql`. It is inspired by the Python library [pgspecial](https://github.com/dbcli/pgspecial).
 
