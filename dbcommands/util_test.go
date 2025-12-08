@@ -1,6 +1,6 @@
-// this file e contains utility functions for setting up and tearing down database objects
 package dbcommands_test
 
+// this file contains utility functions for setting up and tearing down database objects
 import (
 	"context"
 	"fmt"
