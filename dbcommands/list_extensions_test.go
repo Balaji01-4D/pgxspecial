@@ -1,0 +1,85 @@
+package dbcommands_test
+
+import (
+	"context"
+	"testing"
+
+	"github.com/balaji01-4d/pgxspecial/dbcommands"
+	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/stretchr/testify/assert"
+)
+
+func TestListExtensions(t *testing.T) {
+
+	db := connectTestDB(t)
+	defer db.(*pgxpool.Pool).Close()
+	pattern := ""
+	verbose := false
+
+	result, err := dbcommands.ListExtensions(context.Background(), db, pattern, verbose)
+	if err != nil {
+		t.Fatalf("ListExtensions failed: %v", err)
+	}
+	defer result.Close()
+
+	fds := result.FieldDescriptions()
+	if fds == nil {
+		t.Fatalf("FieldDescriptions is nil")
+	}
+	
+	columnsExpected := []string{
+		"name",
+		"version",
+		"schema",
+		"description",
+	}
+	// expecting 4 columns
+	assert.Len(t, fds, 4, "Expected 4 columns")
+	assert.Equal(t, columnsExpected, getColumnNames(fds), "Column names do not match expected")
+
+
+	var allRows []map[string]interface{}
+	allRows, err = RowsToMaps(result)
+	if err != nil {
+		t.Fatalf("Failed to read rows: %v", err)
+	}
+	assert.Greater(t, len(allRows), 0, "Expected at least one extension")
+	assert.True(t, containsByField(allRows, "name", "plpgsql"), "Expected to find 'plpgsql' extension")	
+
+}
+
+func TestListExtensionsWithPattern(t *testing.T) {
+	db := connectTestDB(t)
+	defer db.(*pgxpool.Pool).Close()
+	pattern := "plpg*"
+	verbose := false
+
+	result, err := dbcommands.ListExtensions(context.Background(), db, pattern, verbose)
+	if err != nil {
+		t.Fatalf("ListExtensions failed: %v", err)
+	}
+	defer result.Close()
+
+	fds := result.FieldDescriptions()
+	if fds == nil {
+		t.Fatalf("FieldDescriptions is nil")
+	}
+
+	columnsExpected := []string{
+		"name",
+		"version",
+		"schema",
+		"description",
+	}
+	// expecting 4 columns
+	assert.Len(t, fds, 4, "Expected 4 columns")
+	assert.Equal(t, columnsExpected, getColumnNames(fds), "Column names do not match expected")
+
+	var allRows []map[string]interface{}
+	allRows, err = RowsToMaps(result)
+	if err != nil {
+		t.Fatalf("Failed to read rows: %v", err)
+	}
+	assert.Greater(t, len(allRows), 0, "Expected at least one extension")
+	assert.True(t, containsByField(allRows, "name", "plpgsql"), "Expected to find 'plpgsql' extension")	
+}
