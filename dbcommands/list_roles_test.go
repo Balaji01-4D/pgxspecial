@@ -16,13 +16,15 @@ func TestListRoles(t *testing.T) {
 	pattern := ""
 	verbose := false
 
-	result, err := dbcommands.ListRoles(context.Background(), db, pattern, verbose)
+	res, err := dbcommands.ListRoles(context.Background(), db, pattern, verbose)
 	if err != nil {
 		t.Fatalf("ListRoles failed: %v", err)
 	}
-	defer result.Close()
+		result := RequiresRowResult(t, res)
 
-	fds := result.FieldDescriptions()
+	defer result.Rows.Close()
+
+	fds := result.Rows.FieldDescriptions()
 	assert.NotNil(t, fds)
 
 	columnsExpected := []string{
@@ -42,7 +44,7 @@ func TestListRoles(t *testing.T) {
 	assert.Len(t, fds, 10)
 
 	var allRows []map[string]interface{}
-	allRows, err = RowsToMaps(result)
+	allRows, err = RowsToMaps(result.Rows)
 	if err != nil {
 		t.Fatalf("Failed to read rows: %v", err)
 	}
@@ -66,13 +68,15 @@ func TestListRolesWithPattern(t *testing.T) {
 	pattern := "pg_w*"
 	verbose := false
 
-	result, err := dbcommands.ListRoles(context.Background(), db, pattern, verbose)
+	res, err := dbcommands.ListRoles(context.Background(), db, pattern, verbose)
 	if err != nil {
 		t.Fatalf("ListRoles failed: %v", err)
 	}
-	defer result.Close()
+		result := RequiresRowResult(t, res)
 
-	fds := result.FieldDescriptions()
+	defer result.Rows.Close()
+
+	fds := result.Rows.FieldDescriptions()
 	assert.NotNil(t, fds)
 
 	columnsExpected := []string{
@@ -92,7 +96,7 @@ func TestListRolesWithPattern(t *testing.T) {
 	assert.Len(t, fds, 10)
 
 	var allRows []map[string]interface{}
-	allRows, err = RowsToMaps(result)
+	allRows, err = RowsToMaps(result.Rows)
 	if err != nil {
 		t.Fatalf("Failed to read rows: %v", err)
 	}
@@ -113,13 +117,15 @@ func TestListRolesWithNoMatchingPattern(t *testing.T) {
 	pattern := "pg_xwrite*" // intentional typo
 	verbose := false
 
-	result, err := dbcommands.ListRoles(context.Background(), db, pattern, verbose)
+	res, err := dbcommands.ListRoles(context.Background(), db, pattern, verbose)
 	if err != nil {
 		t.Fatalf("ListRoles failed: %v", err)
 	}
-	defer result.Close()
+		result := RequiresRowResult(t, res)
 
-	fds := result.FieldDescriptions()
+	defer result.Rows.Close()
+
+	fds := result.Rows.FieldDescriptions()
 	assert.NotNil(t, fds)
 
 	columnsExpected := []string{
@@ -139,7 +145,7 @@ func TestListRolesWithNoMatchingPattern(t *testing.T) {
 	assert.Len(t, fds, 10)
 
 	var allRows []map[string]interface{}
-	allRows, err = RowsToMaps(result)
+	allRows, err = RowsToMaps(result.Rows)
 	if err != nil {
 		t.Fatalf("Failed to read rows: %v", err)
 	}
@@ -153,13 +159,15 @@ func TestListRolesWithPatternVerbose(t *testing.T) {
 	pattern := "pg_w*"
 	verbose := true
 
-	result, err := dbcommands.ListRoles(context.Background(), db, pattern, verbose)
+	res, err := dbcommands.ListRoles(context.Background(), db, pattern, verbose)
 	if err != nil {
 		t.Fatalf("ListRoles failed: %v", err)
 	}
-	defer result.Close()
+		result := RequiresRowResult(t, res)
 
-	fds := result.FieldDescriptions()
+	defer result.Rows.Close()
+
+	fds := result.Rows.FieldDescriptions()
 	assert.NotNil(t, fds)
 
 	columnsExpected := []string{
@@ -180,7 +188,7 @@ func TestListRolesWithPatternVerbose(t *testing.T) {
 	assert.Len(t, fds, 11)
 
 	var allRows []map[string]interface{}
-	allRows, err = RowsToMaps(result)
+	allRows, err = RowsToMaps(result.Rows)
 	if err != nil {
 		t.Fatalf("Failed to read rows: %v", err)
 	}
@@ -201,13 +209,15 @@ func TestListRolesWithNoMatchingPatternVerbose(t *testing.T) {
 	pattern := "pg_xwrite*" // intentional typo
 	verbose := true
 
-	result, err := dbcommands.ListRoles(context.Background(), db, pattern, verbose)
+	res, err := dbcommands.ListRoles(context.Background(), db, pattern, verbose)
 	if err != nil {
 		t.Fatalf("ListRoles failed: %v", err)
 	}
-	defer result.Close()
+		result := RequiresRowResult(t, res)
 
-	fds := result.FieldDescriptions()
+	defer result.Rows.Close()
+
+	fds := result.Rows.FieldDescriptions()
 	assert.NotNil(t, fds)
 
 	columnsExpected := []string{
@@ -228,7 +238,7 @@ func TestListRolesWithNoMatchingPatternVerbose(t *testing.T) {
 	assert.Len(t, fds, 11)
 
 	var allRows []map[string]interface{}
-	allRows, err = RowsToMaps(result)
+	allRows, err = RowsToMaps(result.Rows)
 	if err != nil {
 		t.Fatalf("Failed to read rows: %v", err)
 	}

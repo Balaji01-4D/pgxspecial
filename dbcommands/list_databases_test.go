@@ -16,13 +16,16 @@ func TestListDatabases(t *testing.T) {
 	pattern := ""
 	verbose := false
 
-	result, err := dbcommands.ListDatabases(context.Background(), db, pattern, verbose)
+	res, err := dbcommands.ListDatabases(context.Background(), db, pattern, verbose)
 	if err != nil {
 		t.Fatalf("ListDatabases failed: %v", err)
 	}
-	defer result.Close()
 
-	fds := result.FieldDescriptions()
+	result := RequiresRowResult(t, res)
+
+	defer result.Rows.Close()
+
+	fds := result.Rows.FieldDescriptions()
 	assert.NotNil(t, fds)
 
 	columnsExpected := []string{
@@ -38,7 +41,7 @@ func TestListDatabases(t *testing.T) {
 	assert.Len(t, fds, 6)
 
 	var allRows []map[string]interface{}
-	allRows, err = RowsToMaps(result)
+	allRows, err = RowsToMaps(result.Rows)
 	if err != nil {
 		t.Fatalf("Failed to read rows: %v", err)
 	}
@@ -54,13 +57,15 @@ func TestListDatabasesVerbose(t *testing.T) {
 	pattern := ""
 	verbose := true
 
-	result, err := dbcommands.ListDatabases(context.Background(), db, pattern, verbose)
+	res, err := dbcommands.ListDatabases(context.Background(), db, pattern, verbose)
 	if err != nil {
 		t.Fatalf("ListDatabases failed: %v", err)
 	}
-	defer result.Close()
+	result := RequiresRowResult(t, res)
 
-	fds := result.FieldDescriptions()
+	defer result.Rows.Close()
+
+	fds := result.Rows.FieldDescriptions()
 	assert.NotNil(t, fds)
 
 	columnsExpected := []string{
@@ -79,7 +84,7 @@ func TestListDatabasesVerbose(t *testing.T) {
 	assert.Len(t, fds, 9)
 
 	var allRows []map[string]interface{}
-	allRows, err = RowsToMaps(result)
+	allRows, err = RowsToMaps(result.Rows)
 	if err != nil {
 		t.Fatalf("Failed to read rows: %v", err)
 	}
@@ -95,13 +100,14 @@ func TestListDatabaseWithExactPattern(t *testing.T) {
 	pattern := "postgres"
 	verbose := false
 
-	result, err := dbcommands.ListDatabases(context.Background(), db, pattern, verbose)
+	res, err := dbcommands.ListDatabases(context.Background(), db, pattern, verbose)
 	if err != nil {
 		t.Fatalf("ListDatabases failed: %v", err)
 	}
-	defer result.Close()
+	result := RequiresRowResult(t, res)
+	defer result.Rows.Close()
 
-	fds := result.FieldDescriptions()
+	fds := result.Rows.FieldDescriptions()
 	assert.NotNil(t, fds)
 
 	columnsExpected := []string{
@@ -117,7 +123,7 @@ func TestListDatabaseWithExactPattern(t *testing.T) {
 	assert.Len(t, fds, 6)
 
 	var allRows []map[string]interface{}
-	allRows, err = RowsToMaps(result)
+	allRows, err = RowsToMaps(result.Rows)
 	if err != nil {
 		t.Fatalf("Failed to read rows: %v", err)
 	}
@@ -134,13 +140,15 @@ func TestListDatabaseWithPattern(t *testing.T) {
 	pattern := "templ*"
 	verbose := false
 
-	result, err := dbcommands.ListDatabases(context.Background(), db, pattern, verbose)
+	res, err := dbcommands.ListDatabases(context.Background(), db, pattern, verbose)
 	if err != nil {
 		t.Fatalf("ListDatabases failed: %v", err)
 	}
-	defer result.Close()
 
-	fds := result.FieldDescriptions()
+	result := RequiresRowResult(t, res)
+	defer result.Rows.Close()
+
+	fds := result.Rows.FieldDescriptions()
 	assert.NotNil(t, fds)
 
 	columnsExpected := []string{
@@ -156,7 +164,7 @@ func TestListDatabaseWithPattern(t *testing.T) {
 	assert.Len(t, fds, 6)
 
 	var allRows []map[string]interface{}
-	allRows, err = RowsToMaps(result)
+	allRows, err = RowsToMaps(result.Rows)
 	if err != nil {
 		t.Fatalf("Failed to read rows: %v", err)
 	}
@@ -173,13 +181,16 @@ func TestListDatabaseWithNoMatchingPattern(t *testing.T) {
 	pattern := "pastgres" // typo intentional
 	verbose := false
 
-	result, err := dbcommands.ListDatabases(context.Background(), db, pattern, verbose)
+	res, err := dbcommands.ListDatabases(context.Background(), db, pattern, verbose)
 	if err != nil {
 		t.Fatalf("ListDatabases failed: %v", err)
 	}
-	defer result.Close()
 
-	fds := result.FieldDescriptions()
+	result := RequiresRowResult(t, res)
+
+	defer result.Rows.Close()
+
+	fds := result.Rows.FieldDescriptions()
 	assert.NotNil(t, fds)
 
 	columnsExpected := []string{
@@ -195,7 +206,7 @@ func TestListDatabaseWithNoMatchingPattern(t *testing.T) {
 	assert.Len(t, fds, 6)
 
 	var allRows []map[string]interface{}
-	allRows, err = RowsToMaps(result)
+	allRows, err = RowsToMaps(result.Rows)
 	if err != nil {
 		t.Fatalf("Failed to read rows: %v", err)
 	}

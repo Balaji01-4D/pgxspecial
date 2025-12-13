@@ -16,13 +16,15 @@ func TestListExtensions(t *testing.T) {
 	pattern := ""
 	verbose := false
 
-	result, err := dbcommands.ListExtensions(context.Background(), db, pattern, verbose)
+	res, err := dbcommands.ListExtensions(context.Background(), db, pattern, verbose)
 	if err != nil {
 		t.Fatalf("ListExtensions failed: %v", err)
 	}
-	defer result.Close()
+		result := RequiresRowResult(t, res)
 
-	fds := result.FieldDescriptions()
+	defer result.Rows.Close()
+
+	fds := result.Rows.FieldDescriptions()
 	if fds == nil {
 		t.Fatalf("FieldDescriptions is nil")
 	}
@@ -39,7 +41,7 @@ func TestListExtensions(t *testing.T) {
 
 
 	var allRows []map[string]interface{}
-	allRows, err = RowsToMaps(result)
+	allRows, err = RowsToMaps(result.Rows)
 	if err != nil {
 		t.Fatalf("Failed to read rows: %v", err)
 	}
@@ -54,13 +56,15 @@ func TestListExtensionsWithPattern(t *testing.T) {
 	pattern := "plpg*"
 	verbose := false
 
-	result, err := dbcommands.ListExtensions(context.Background(), db, pattern, verbose)
+	res, err := dbcommands.ListExtensions(context.Background(), db, pattern, verbose)
 	if err != nil {
 		t.Fatalf("ListExtensions failed: %v", err)
 	}
-	defer result.Close()
+		result := RequiresRowResult(t, res)
 
-	fds := result.FieldDescriptions()
+	defer result.Rows.Close()
+
+	fds := result.Rows.FieldDescriptions()
 	if fds == nil {
 		t.Fatalf("FieldDescriptions is nil")
 	}
@@ -76,7 +80,7 @@ func TestListExtensionsWithPattern(t *testing.T) {
 	assert.Equal(t, columnsExpected, getColumnNames(fds), "Column names do not match expected")
 
 	var allRows []map[string]interface{}
-	allRows, err = RowsToMaps(result)
+	allRows, err = RowsToMaps(result.Rows)
 	if err != nil {
 		t.Fatalf("Failed to read rows: %v", err)
 	}

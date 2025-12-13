@@ -26,13 +26,15 @@ func TestListDefaultPrivileges(t *testing.T) {
 
 	CreateDefaultPrivileges(t, context.Background(), db, "app_user")
 	defer DropDefaultPrivileges(t, context.Background(), db, "app_user")
-	result, err := dbcommands.ListDefaultPrivileges(context.Background(), db, pattern, false)
+	res, err := dbcommands.ListDefaultPrivileges(context.Background(), db, pattern, false)
 	if err != nil {
 		t.Fatalf("ListDefaultPrivileges failed: %v", err)
 	}
-	defer result.Close()
+		result := RequiresRowResult(t, res)
 
-	fds := result.FieldDescriptions()
+	defer result.Rows.Close()
+
+	fds := result.Rows.FieldDescriptions()
 	assert.NotNil(t, fds)
 
 	columnsExpected := []string{
@@ -46,7 +48,7 @@ func TestListDefaultPrivileges(t *testing.T) {
 	assert.Len(t, fds, 4)
 
 	var allRows []map[string]interface{}
-	allRows, err = RowsToMaps(result)
+	allRows, err = RowsToMaps(result.Rows)
 	if err != nil {
 		t.Fatalf("Failed to read rows: %v", err)
 	}

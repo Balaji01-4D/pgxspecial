@@ -47,15 +47,16 @@ func TestShowFunctionDefinition(t *testing.T) {
 	pattern := "add_numbers(integer, integer)"
 	verbose := false
 
-	result, err := dbcommands.ShowFunctionDefinition(ctx, db, pattern, verbose)
+	res, err := dbcommands.ShowFunctionDefinition(ctx, db, pattern, verbose)
 	if err != nil {
 		t.Fatalf("ShowFunctionDefinition failed: %v", err)
 	}
-	defer result.Close()
+		result := RequiresRowResult(t, res)
+	defer result.Rows.Close()
 
 	var source string
-	if result.Next() {
-		err = result.Scan(&source)
+	if result.Rows.Next() {
+		err = result.Rows.Scan(&source)
 		if err != nil {
 			t.Fatalf("Failed to scan result: %v", err)
 		}
@@ -65,7 +66,7 @@ func TestShowFunctionDefinition(t *testing.T) {
 
 	assert.Contains(t, strings.TrimSpace(source), "add_numbers", "Function definition does not match expected")
 	assert.Contains(t, strings.TrimSpace(source), "RETURN a + b;", "Function body does not match expected")
-	assert.False(t, result.Next(), "Expected only one row")
+	assert.False(t, result.Rows.Next(), "Expected only one row")
 }
 
 func TestShowFunctionDefinitionVerbose(t *testing.T) {
@@ -91,15 +92,16 @@ func TestShowFunctionDefinitionVerbose(t *testing.T) {
 	pattern := "add_numbers_verbose(integer, integer)"
 	verbose := true
 
-	result, err := dbcommands.ShowFunctionDefinition(ctx, db, pattern, verbose)
+	res, err := dbcommands.ShowFunctionDefinition(ctx, db, pattern, verbose)
 	if err != nil {
 		t.Fatalf("ShowFunctionDefinition with verbose failed: %v", err)
 	}
-	defer result.Close()
+		result := RequiresRowResult(t, res)
+	defer result.Rows.Close()
 
 	var source string
-	if result.Next() {
-		err = result.Scan(&source)
+	if result.Rows.Next() {
+		err = result.Rows.Scan(&source)
 		if err != nil {
 			t.Fatalf("Failed to scan result: %v", err)
 		}

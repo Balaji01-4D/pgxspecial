@@ -7,7 +7,6 @@ import (
 
 	"github.com/balaji01-4d/pgxspecial"
 	"github.com/balaji01-4d/pgxspecial/database"
-	"github.com/jackc/pgx/v5"
 )
 
 func init() {
@@ -20,7 +19,7 @@ func init() {
 	})
 }
 
-func ShowFunctionDefinition(ctx context.Context, db database.Queryer, pattern string, verbose bool) (pgx.Rows, error) {
+func ShowFunctionDefinition(ctx context.Context, db database.Queryer, pattern string, verbose bool) (pgxspecial.SpecialCommandResult, error) {
 	var sql string
 	if strings.Contains(pattern, "(") {
 		sql = "SELECT $1::pg_catalog.regprocedure::pg_catalog.oid"
@@ -36,7 +35,12 @@ func ShowFunctionDefinition(ctx context.Context, db database.Queryer, pattern st
 
 	sql = "SELECT pg_catalog.pg_get_functiondef($1) as source"
 	if !verbose {
-		return db.Query(ctx, sql, foid)
+		rows, err := db.Query(ctx, sql, foid)
+		if err != nil {
+			return nil, err
+		}
+		return pgxspecial.RowResult{Rows: rows}, nil
+
 	}
 
 	var source string
@@ -66,6 +70,10 @@ func ShowFunctionDefinition(ctx context.Context, db database.Queryer, pattern st
 		}
 		sb.WriteString(prefix + " " + row + "\n")
 	}
+	rows, err := db.Query(ctx, "SELECT $1 as source", sb.String())
+	if err != nil {
+		return nil, err
+	}
+	return pgxspecial.RowResult{Rows: rows}, nil
 
-	return db.Query(ctx, "SELECT $1 as source", sb.String())
 }

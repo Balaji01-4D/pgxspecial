@@ -7,7 +7,6 @@ import (
 
 	"github.com/balaji01-4d/pgxspecial"
 	"github.com/balaji01-4d/pgxspecial/database"
-	"github.com/jackc/pgx/v5"
 )
 
 func init() {
@@ -20,7 +19,7 @@ func init() {
 	})
 }
 
-func ListFunctions(ctx context.Context, db database.Queryer, pattern string, verbose bool) (pgx.Rows, error) {
+func ListFunctions(ctx context.Context, db database.Queryer, pattern string, verbose bool) (pgxspecial.SpecialCommandResult, error) {
 	var sb strings.Builder
 	args := []any{}
 	argIndex := 1
@@ -96,5 +95,5 @@ func ListFunctions(ctx context.Context, db database.Queryer, pattern string, ver
 	sb.WriteString(" ORDER BY 1, 2, 4;")
 
 	rows, err := db.Query(ctx, sb.String(), args...)
-	return rows, err
+	return pgxspecial.RowResult{Rows: rows}, err
 }

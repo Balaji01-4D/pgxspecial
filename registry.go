@@ -6,7 +6,6 @@ import (
 	"strings"
 
 	"github.com/balaji01-4d/pgxspecial/database"
-	"github.com/jackc/pgx/v5"
 )
 
 // SpecialHandler defines the signature for a special command handler.
@@ -16,7 +15,7 @@ import (
 //
 // The returned pgx.Rows, if non-nil, is passed back to the caller for consumption.
 // Any error returned indicates command execution failure.
-type SpecialHandler func(ctx context.Context, db database.Queryer, args string, verbose bool) (pgx.Rows, error)
+type SpecialHandler func(ctx context.Context, db database.Queryer, args string, verbose bool) (SpecialCommandResult, error)
 
 // commandRegistry stores all registered special commands, indexed by command
 // name and aliases. Command lookup is performed against this registry during
@@ -81,7 +80,7 @@ func RegisterCommand(cmdRegistry SpecialCommandRegistry) {
 //
 // An error is returned if the command is not found in the registry or if the command
 // handler returns an error.
-func ExecuteSpecialCommand(ctx context.Context, queryer database.Queryer, specialCommand string) (pgx.Rows, bool, error) {
+func ExecuteSpecialCommand(ctx context.Context, queryer database.Queryer, specialCommand string) (SpecialCommandResult, bool, error) {
 	if !strings.HasPrefix(specialCommand, "\\") {
 		return nil, false, nil
 	}

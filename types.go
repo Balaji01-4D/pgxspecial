@@ -1,6 +1,15 @@
 // this package contains special command types
 package pgxspecial
 
+import "github.com/jackc/pgx/v5"
+
+type SpecialResultKind int
+
+const (
+	ResultKindRows SpecialResultKind = iota
+	ResultKindDescribeTable
+)
+
 // SpecialCommand represents a parsed and executable special command.
 //
 // It contains the normalized command name, descriptive metadata, and the handler
@@ -26,12 +35,24 @@ type SpecialCommandRegistry struct {
 	CaseSensitive bool
 }
 
+type SpecialCommandResult interface {
+	ResultKind() SpecialResultKind
+}
+
+type RowResult struct {
+	Rows pgx.Rows
+}
+
+func (r RowResult) ResultKind() SpecialResultKind {
+	return ResultKindRows
+}
+
 type TableFooterMeta struct {
 	Indexes          []string // lines under "Indexes:"
 	CheckConstraints []string // "Check constraints:"
 	ForeignKeys      []string // "Foreign-key constraints:"
 	ReferencedBy     []string // "Referenced by:"
-    ViewDefinition   *string  // "View definition:"
+	ViewDefinition   *string  // "View definition:"
 
 	RulesEnabled  []string // under "Rules:"
 	RulesDisabled []string // "Disabled rules:"
@@ -65,4 +86,8 @@ type DescribeTableResult struct {
 	Columns       []string
 	Data          [][]string
 	TableMetaData TableFooterMeta
+}
+
+func (r *DescribeTableResult) ResultKind() SpecialResultKind {
+	return ResultKindDescribeTable
 }

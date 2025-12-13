@@ -7,7 +7,6 @@ import (
 
 	"github.com/balaji01-4d/pgxspecial"
 	"github.com/balaji01-4d/pgxspecial/database"
-	"github.com/jackc/pgx/v5"
 )
 
 func init() {
@@ -21,7 +20,7 @@ func init() {
 }
 
 // verbose is ignored for now
-func ListExtensions(ctx context.Context, db database.Queryer, pattern string, verbose bool) (pgx.Rows, error) {
+func ListExtensions(ctx context.Context, db database.Queryer, pattern string, verbose bool) (pgxspecial.SpecialCommandResult, error) {
 	var sb strings.Builder
 	args := []any{}
 	argIndex := 1
@@ -47,11 +46,11 @@ func ListExtensions(ctx context.Context, db database.Queryer, pattern string, ve
 
 	sb.WriteString(" ORDER BY 1, 2;")
 	rows, err := db.Query(ctx, sb.String(), args...)
-	return rows, err
+	return pgxspecial.RowResult{Rows: rows}, err
 }
 
 // it is not used currently but may be useful in future implementations
-func findExtension(ctx context.Context, db database.Queryer, extName string) (pgx.Rows, error) {
+func findExtension(ctx context.Context, db database.Queryer, extName string) (pgxspecial.SpecialCommandResult, error) {
 	var sb strings.Builder
 
 	sb.WriteString(`
@@ -66,11 +65,11 @@ func findExtension(ctx context.Context, db database.Queryer, extName string) (pg
 	sb.WriteString(" ORDER BY 1, 2;")
 
 	rows, err := db.Query(ctx, sb.String(), extName)
-	return rows, err
+	return pgxspecial.RowResult{Rows: rows}, err
 }
 
 // it is not used currently but may be useful in future implementations
-func describeExtension(ctx context.Context, db database.Queryer, oid uint32) (pgx.Rows, error) {
+func describeExtension(ctx context.Context, db database.Queryer, oid uint32) (pgxspecial.SpecialCommandResult, error) {
 	var sb strings.Builder
 
 	sb.WriteString(`
@@ -84,5 +83,5 @@ func describeExtension(ctx context.Context, db database.Queryer, oid uint32) (pg
 	`)
 
 	rows, err := db.Query(ctx, sb.String(), oid)
-	return rows, err
+	return pgxspecial.RowResult{Rows: rows}, err
 }

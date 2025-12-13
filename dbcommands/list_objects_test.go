@@ -27,13 +27,15 @@ func TestListObjects(t *testing.T) {
 	// "r" for ordinary table
 	relkinds := []string{"r"}
 
-	result, err := dbcommands.ListObjects(ctx, db, pattern, verbose, relkinds)
+	res, err := dbcommands.ListObjects(ctx, db, pattern, verbose, relkinds)
 	if err != nil {
 		t.Fatalf("ListObjects failed: %v", err)
 	}
-	defer result.Close()
+		result := RequiresRowResult(t, res)
 
-	allRows, err := RowsToMaps(result)
+	defer result.Rows.Close()
+
+	allRows, err := RowsToMaps(result.Rows)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -46,14 +48,16 @@ func TestListPrivilegesWithPattern(t *testing.T) {
 	defer db.(*pgxpool.Pool).Close()
 
 	pattern := "pg_catalog.pg_class" // A known system table
-	result, err := dbcommands.ListPrivileges(context.Background(), db, pattern, false)
+	res, err := dbcommands.ListPrivileges(context.Background(), db, pattern, false)
 	if err != nil {
 		t.Fatalf("ListPrivileges with pattern failed: %v", err)
 	}
-	defer result.Close()
+		result := RequiresRowResult(t, res)
+
+	defer result.Rows.Close()
 
 	// Just ensure it runs without error and returns rows (or empty rows if no privs found, but logic is covered)
-	_, err = RowsToMaps(result)
+	_, err = RowsToMaps(result.Rows)
 	assert.NoError(t, err)
 }
 
@@ -64,12 +68,14 @@ func TestListDefaultPrivilegesWithPattern(t *testing.T) {
 	// Setup a specific role/privilege to query against if needed,
 	// or just test the query generation logic with a pattern.
 	pattern := "public"
-	result, err := dbcommands.ListDefaultPrivileges(context.Background(), db, pattern, false)
+	res, err := dbcommands.ListDefaultPrivileges(context.Background(), db, pattern, false)
+		result := RequiresRowResult(t, res)
+
 	if err != nil {
 		t.Fatalf("ListDefaultPrivileges with pattern failed: %v", err)
 	}
-	defer result.Close()
+	defer result.Rows.Close()
 
-	_, err = RowsToMaps(result)
+	_, err = RowsToMaps(result.Rows)
 	assert.NoError(t, err)
 }

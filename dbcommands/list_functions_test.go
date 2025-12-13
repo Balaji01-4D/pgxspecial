@@ -24,13 +24,15 @@ func TestListFunctions(t *testing.T) {
 	pattern := ""
 	verbose := false
 
-	result, err := dbcommands.ListFunctions(context.Background(), db, pattern, verbose)
+	res, err := dbcommands.ListFunctions(context.Background(), db, pattern, verbose)
 	if err != nil {
 		t.Fatalf("ListFunctions failed: %v", err)
 	}
-	defer result.Close()
+		result := RequiresRowResult(t, res)
 
-	fds := result.FieldDescriptions()
+	defer result.Rows.Close()
+
+	fds := result.Rows.FieldDescriptions()
 	assert.NotNil(t, fds)
 
 	columnsExpected := []string{
@@ -45,7 +47,7 @@ func TestListFunctions(t *testing.T) {
 	assert.Len(t, fds, 5)
 
 	var allRows []map[string]interface{}
-	allRows, err = RowsToMaps(result)
+	allRows, err = RowsToMaps(result.Rows)
 	if err != nil {
 		t.Fatalf("Failed to read rows: %v", err)
 	}
@@ -68,13 +70,15 @@ func TestListFunctionsWithPattern(t *testing.T) {
 	pattern := "get_*"
 	verbose := false
 
-	result, err := dbcommands.ListFunctions(context.Background(), db, pattern, verbose)
+	res, err := dbcommands.ListFunctions(context.Background(), db, pattern, verbose)
 	if err != nil {
 		t.Fatalf("ListFunctions failed: %v", err)
 	}
-	defer result.Close()
+		result := RequiresRowResult(t, res)
 
-	fds := result.FieldDescriptions()
+	defer result.Rows.Close()
+
+	fds := result.Rows.FieldDescriptions()
 	assert.NotNil(t, fds)
 
 	columnsExpected := []string{
@@ -89,7 +93,7 @@ func TestListFunctionsWithPattern(t *testing.T) {
 	assert.Len(t, fds, 5)
 
 	var allRows []map[string]interface{}
-	allRows, err = RowsToMaps(result)
+	allRows, err = RowsToMaps(result.Rows)
 	if err != nil {
 		t.Fatalf("Failed to read rows: %v", err)
 	}
@@ -113,13 +117,15 @@ func TestListFunctionsWithNoMatchingPattern(t *testing.T) {
 	pattern := "fetch_*"
 	verbose := false
 
-	result, err := dbcommands.ListFunctions(context.Background(), db, pattern, verbose)
+	res, err := dbcommands.ListFunctions(context.Background(), db, pattern, verbose)
 	if err != nil {
 		t.Fatalf("ListFunctions failed: %v", err)
 	}
-	defer result.Close()
+		result := RequiresRowResult(t, res)
 
-	fds := result.FieldDescriptions()
+	defer result.Rows.Close()
+
+	fds := result.Rows.FieldDescriptions()
 	assert.NotNil(t, fds)
 
 	columnsExpected := []string{
@@ -134,7 +140,7 @@ func TestListFunctionsWithNoMatchingPattern(t *testing.T) {
 	assert.Len(t, fds, 5)
 
 	var allRows []map[string]interface{}
-	allRows, err = RowsToMaps(result)
+	allRows, err = RowsToMaps(result.Rows)
 	if err != nil {
 		t.Fatalf("Failed to read rows: %v", err)
 	}
@@ -156,13 +162,15 @@ func TestListFunctionsVerbose(t *testing.T) {
 	pattern := ""
 	verbose := true
 
-	result, err := dbcommands.ListFunctions(context.Background(), db, pattern, verbose)
+	res, err := dbcommands.ListFunctions(context.Background(), db, pattern, verbose)
 	if err != nil {
 		t.Fatalf("ListFunctions failed: %v", err)
 	}
-	defer result.Close()
+		result := RequiresRowResult(t, res)
 
-	fds := result.FieldDescriptions()
+	defer result.Rows.Close()
+
+	fds := result.Rows.FieldDescriptions()
 	assert.NotNil(t, fds)
 
 	columnsExpected := []string{
@@ -182,7 +190,7 @@ func TestListFunctionsVerbose(t *testing.T) {
 	assert.Len(t, fds, 10)
 
 	var allRows []map[string]interface{}
-	allRows, err = RowsToMaps(result)
+	allRows, err = RowsToMaps(result.Rows)
 	if err != nil {
 		t.Fatalf("Failed to read rows: %v", err)
 	}
@@ -206,13 +214,15 @@ func TestListFunctionsVerboseWithPattern(t *testing.T) {
 	pattern := "get_*"
 	verbose := true
 
-	result, err := dbcommands.ListFunctions(context.Background(), db, pattern, verbose)
+	res, err := dbcommands.ListFunctions(context.Background(), db, pattern, verbose)
 	if err != nil {
 		t.Fatalf("ListFunctions failed: %v", err)
 	}
-	defer result.Close()
+		result := RequiresRowResult(t, res)
 
-	fds := result.FieldDescriptions()
+	defer result.Rows.Close()
+
+	fds := result.Rows.FieldDescriptions()
 	assert.NotNil(t, fds)
 
 	columnsExpected := []string{
@@ -232,7 +242,7 @@ func TestListFunctionsVerboseWithPattern(t *testing.T) {
 	assert.Len(t, fds, 10)
 
 	var allRows []map[string]interface{}
-	allRows, err = RowsToMaps(result)
+	allRows, err = RowsToMaps(result.Rows)
 	if err != nil {
 		t.Fatalf("Failed to read rows: %v", err)
 	}
@@ -256,13 +266,15 @@ func TestListFunctionsVerboseWithNoMatchingPattern(t *testing.T) {
 	pattern := "fetch_*"
 	verbose := true
 
-	result, err := dbcommands.ListFunctions(context.Background(), db, pattern, verbose)
+	res, err := dbcommands.ListFunctions(context.Background(), db, pattern, verbose)
 	if err != nil {
 		t.Fatalf("ListFunctions failed: %v", err)
 	}
-	defer result.Close()
+		result := RequiresRowResult(t, res)
 
-	fds := result.FieldDescriptions()
+	defer result.Rows.Close()
+
+	fds := result.Rows.FieldDescriptions()
 	assert.NotNil(t, fds)
 
 	columnsExpected := []string{
@@ -282,7 +294,7 @@ func TestListFunctionsVerboseWithNoMatchingPattern(t *testing.T) {
 	assert.Len(t, fds, 10)
 
 	var allRows []map[string]interface{}
-	allRows, err = RowsToMaps(result)
+	allRows, err = RowsToMaps(result.Rows)
 	if err != nil {
 		t.Fatalf("Failed to read rows: %v", err)
 	}

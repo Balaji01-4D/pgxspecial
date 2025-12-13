@@ -7,7 +7,6 @@ import (
 
 	"github.com/balaji01-4d/pgxspecial"
 	"github.com/balaji01-4d/pgxspecial/database"
-	"github.com/jackc/pgx/v5"
 )
 
 func init() {
@@ -16,7 +15,7 @@ func init() {
 		Cmd:         "\\dt",
 		Description: "List tables.",
 		Syntax:      "\\dt[+] [pattern]",
-		Handler: func(ctx context.Context, db database.Queryer, pattern string, verbose bool) (pgx.Rows, error) {
+		Handler: func(ctx context.Context, db database.Queryer, pattern string, verbose bool) (pgxspecial.SpecialCommandResult, error) {
 			return ListObjects(ctx, db, pattern, verbose, []string{"r", "p", ""})
 		},
 		CaseSensitive: true,
@@ -27,7 +26,7 @@ func init() {
 		Cmd:         "\\dv",
 		Description: "List views.",
 		Syntax:      "\\dv[+] [pattern]",
-		Handler: func(ctx context.Context, db database.Queryer, pattern string, verbose bool) (pgx.Rows, error) {
+		Handler: func(ctx context.Context, db database.Queryer, pattern string, verbose bool) (pgxspecial.SpecialCommandResult, error) {
 			return ListObjects(ctx, db, pattern, verbose, []string{"v", "s", ""})
 		},
 		CaseSensitive: true,
@@ -38,7 +37,7 @@ func init() {
 		Cmd:         "\\dm",
 		Description: "List materialized views.",
 		Syntax:      "\\dm[+] [pattern]",
-		Handler: func(ctx context.Context, db database.Queryer, pattern string, verbose bool) (pgx.Rows, error) {
+		Handler: func(ctx context.Context, db database.Queryer, pattern string, verbose bool) (pgxspecial.SpecialCommandResult, error) {
 			return ListObjects(ctx, db, pattern, verbose, []string{"m", "s", ""})
 		},
 		CaseSensitive: true,
@@ -49,7 +48,7 @@ func init() {
 		Cmd:         "\\ds",
 		Description: "List sequences.",
 		Syntax:      "\\ds[+] [pattern]",
-		Handler: func(ctx context.Context, db database.Queryer, pattern string, verbose bool) (pgx.Rows, error) {
+		Handler: func(ctx context.Context, db database.Queryer, pattern string, verbose bool) (pgxspecial.SpecialCommandResult, error) {
 			return ListObjects(ctx, db, pattern, verbose, []string{"S", "s", ""})
 		},
 		CaseSensitive: true,
@@ -60,14 +59,14 @@ func init() {
 		Cmd:         "\\di",
 		Description: "List indexes.",
 		Syntax:      "\\di[+] [pattern]",
-		Handler: func(ctx context.Context, db database.Queryer, pattern string, verbose bool) (pgx.Rows, error) {
+		Handler: func(ctx context.Context, db database.Queryer, pattern string, verbose bool) (pgxspecial.SpecialCommandResult, error) {
 			return ListObjects(ctx, db, pattern, verbose, []string{"i", "s", ""})
 		},
 		CaseSensitive: true,
 	})
 }
 
-func ListObjects(ctx context.Context, db database.Queryer, pattern string, verbose bool, relkinds []string) (pgx.Rows, error) {
+func ListObjects(ctx context.Context, db database.Queryer, pattern string, verbose bool, relkinds []string) (pgxspecial.SpecialCommandResult, error) {
 	var sb strings.Builder
 	args := []any{}
 	argIndex := 1
@@ -124,5 +123,5 @@ func ListObjects(ctx context.Context, db database.Queryer, pattern string, verbo
 	sb.WriteString("ORDER BY 1, 2;")
 
 	rows, err := db.Query(ctx, sb.String(), args...)
-	return rows, err
+	return pgxspecial.RowResult{Rows: rows}, err
 }

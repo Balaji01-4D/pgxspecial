@@ -7,7 +7,6 @@ import (
 
 	"github.com/balaji01-4d/pgxspecial"
 	"github.com/balaji01-4d/pgxspecial/database"
-	"github.com/jackc/pgx/v5"
 )
 
 func init() {
@@ -20,7 +19,7 @@ func init() {
 	})
 }
 
-func ListDatatypes(ctx context.Context, db database.Queryer, pattern string, verbose bool) (pgx.Rows, error) {
+func ListDatatypes(ctx context.Context, db database.Queryer, pattern string, verbose bool) (pgxspecial.SpecialCommandResult, error) {
 	var sb strings.Builder
 	args := []any{}
 	argIndex := 1
@@ -92,5 +91,5 @@ WHERE (t.typrelid = 0 OR
 
 	rows, err := db.Query(ctx, sb.String(), args...)
 
-	return rows, err
+	return pgxspecial.RowResult{Rows: rows}, err
 }

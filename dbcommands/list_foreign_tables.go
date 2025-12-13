@@ -7,7 +7,6 @@ import (
 
 	"github.com/balaji01-4d/pgxspecial"
 	"github.com/balaji01-4d/pgxspecial/database"
-	"github.com/jackc/pgx/v5"
 )
 
 func init() {
@@ -20,7 +19,7 @@ func init() {
 	})
 }
 
-func ListForeignTables(ctx context.Context, db database.Queryer, pattern string, verbose bool) (pgx.Rows, error) {
+func ListForeignTables(ctx context.Context, db database.Queryer, pattern string, verbose bool) (pgxspecial.SpecialCommandResult, error) {
 	var sb strings.Builder
 	args := []any{}
 	argIndex := 1
@@ -69,5 +68,5 @@ WHERE c.relkind IN ('f','')
 	sb.WriteString("ORDER BY 1,2;")
 
 	rows, err := db.Query(ctx, sb.String(), args...)
-	return rows, err
+	return pgxspecial.RowResult{Rows: rows}, err
 }

@@ -24,13 +24,14 @@ func TestListDatatypes(t *testing.T) {
 	pattern := ""
 	verbose := false
 
-	result, err := dbcommands.ListDatatypes(context.Background(), db, pattern, verbose)
+	res, err := dbcommands.ListDatatypes(context.Background(), db, pattern, verbose)
 	if err != nil {
 		t.Fatalf("ListDatatypes failed: %v", err)
 	}
-	defer result.Close()
+	result := RequiresRowResult(t, res)
+	defer result.Rows.Close()
 
-	fds := result.FieldDescriptions()
+	fds := result.Rows.FieldDescriptions()
 	assert.NotNil(t, fds)
 
 	columnsExpected := []string{
@@ -43,7 +44,7 @@ func TestListDatatypes(t *testing.T) {
 	assert.Len(t, fds, 3)
 
 	var allRows []map[string]interface{}
-	allRows, err = RowsToMaps(result)
+	allRows, err = RowsToMaps(result.Rows)
 	if err != nil {
 		t.Fatalf("Failed to read rows: %v", err)
 	}
@@ -67,13 +68,14 @@ func TestListDatatypesWithPattern(t *testing.T) {
 	pattern := "*_enum"
 	verbose := false
 
-	result, err := dbcommands.ListDatatypes(context.Background(), db, pattern, verbose)
+	res, err := dbcommands.ListDatatypes(context.Background(), db, pattern, verbose)
 	if err != nil {
 		t.Fatalf("ListDatatypes failed: %v", err)
 	}
-	defer result.Close()
+	result := RequiresRowResult(t, res)
+	defer result.Rows.Close()
 
-	fds := result.FieldDescriptions()
+	fds := result.Rows.FieldDescriptions()
 	assert.NotNil(t, fds)
 
 	columnsExpected := []string{
@@ -86,7 +88,7 @@ func TestListDatatypesWithPattern(t *testing.T) {
 	assert.Len(t, fds, 3)
 
 	var allRows []map[string]interface{}
-	allRows, err = RowsToMaps(result)
+	allRows, err = RowsToMaps(result.Rows)
 	if err != nil {
 		t.Fatalf("Failed to read rows: %v", err)
 	}
@@ -110,13 +112,14 @@ func TestListDatatypesWithNoMatchingPattern(t *testing.T) {
 	pattern := "type_xenum"
 	verbose := false
 
-	result, err := dbcommands.ListDatatypes(context.Background(), db, pattern, verbose)
+	res, err := dbcommands.ListDatatypes(context.Background(), db, pattern, verbose)
 	if err != nil {
 		t.Fatalf("ListDatatypes failed: %v", err)
 	}
-	defer result.Close()
+	result := RequiresRowResult(t, res)
+	defer result.Rows.Close()
 
-	fds := result.FieldDescriptions()
+	fds := result.Rows.FieldDescriptions()
 	assert.NotNil(t, fds)
 
 	columnsExpected := []string{
@@ -129,7 +132,7 @@ func TestListDatatypesWithNoMatchingPattern(t *testing.T) {
 	assert.Len(t, fds, 3)
 
 	var allRows []map[string]interface{}
-	allRows, err = RowsToMaps(result)
+	allRows, err = RowsToMaps(result.Rows)
 	if err != nil {
 		t.Fatalf("Failed to read rows: %v", err)
 	}
@@ -151,13 +154,14 @@ func TestListDatatypesVerbose(t *testing.T) {
 	pattern := ""
 	verbose := true
 
-	result, err := dbcommands.ListDatatypes(context.Background(), db, pattern, verbose)
+	res, err := dbcommands.ListDatatypes(context.Background(), db, pattern, verbose)
 	if err != nil {
 		t.Fatalf("ListDatatypes failed: %v", err)
 	}
-	defer result.Close()
+	result := RequiresRowResult(t, res)
+	defer result.Rows.Close()
 
-	fds := result.FieldDescriptions()
+	fds := result.Rows.FieldDescriptions()
 	assert.NotNil(t, fds)
 
 	expectedColumns := []string{
@@ -173,7 +177,7 @@ func TestListDatatypesVerbose(t *testing.T) {
 	// expecting 7 columns
 	assert.Len(t, fds, 7)
 	var allRows []map[string]interface{}
-	allRows, err = RowsToMaps(result)
+	allRows, err = RowsToMaps(result.Rows)
 	if err != nil {
 		t.Fatalf("Failed to read rows: %v", err)
 	}
@@ -198,13 +202,14 @@ func TestListDatatypesVerboseWithPattern(t *testing.T) {
 	pattern := "*_enum"
 	verbose := true
 
-	result, err := dbcommands.ListDatatypes(context.Background(), db, pattern, verbose)
+	res, err := dbcommands.ListDatatypes(context.Background(), db, pattern, verbose)
 	if err != nil {
 		t.Fatalf("ListDatatypes failed: %v", err)
 	}
-	defer result.Close()
+	result := RequiresRowResult(t, res)
+	defer result.Rows.Close()
 
-	fds := result.FieldDescriptions()
+	fds := result.Rows.FieldDescriptions()
 	assert.NotNil(t, fds)
 
 	expectedColumns := []string{
@@ -220,7 +225,7 @@ func TestListDatatypesVerboseWithPattern(t *testing.T) {
 	// expecting 7 columns
 	assert.Len(t, fds, 7)
 	var allRows []map[string]interface{}
-	allRows, err = RowsToMaps(result)
+	allRows, err = RowsToMaps(result.Rows)
 	if err != nil {
 		t.Fatalf("Failed to read rows: %v", err)
 	}
@@ -242,13 +247,14 @@ func TestListDatatypesVerboseWithNoMatchingPattern(t *testing.T) {
 
 	pattern := "type_xenum"
 	verbose := true
-	result, err := dbcommands.ListDatatypes(context.Background(), db, pattern, verbose)
+	res, err := dbcommands.ListDatatypes(context.Background(), db, pattern, verbose)
 	if err != nil {
 		t.Fatalf("ListDatatypes failed: %v", err)
 	}
-	defer result.Close()
+	result := RequiresRowResult(t, res)
+	defer result.Rows.Close()
 
-	fds := result.FieldDescriptions()
+	fds := result.Rows.FieldDescriptions()
 	assert.NotNil(t, fds)
 
 	expectedColumns := []string{
@@ -264,7 +270,7 @@ func TestListDatatypesVerboseWithNoMatchingPattern(t *testing.T) {
 	// expecting 7 columns
 	assert.Len(t, fds, 7)
 	var allRows []map[string]interface{}
-	allRows, err = RowsToMaps(result)
+	allRows, err = RowsToMaps(result.Rows)
 	if err != nil {
 		t.Fatalf("Failed to read rows: %v", err)
 	}

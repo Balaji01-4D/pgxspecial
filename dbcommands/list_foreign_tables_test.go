@@ -25,13 +25,15 @@ func TestListForeignTables(t *testing.T) {
 	pattern := ""
 	verbose := false
 
-	result, err := dbcommands.ListForeignTables(context.Background(), db, pattern, verbose)
+	res, err := dbcommands.ListForeignTables(context.Background(), db, pattern, verbose)
 	if err != nil {
 		t.Fatalf("ListForeignTables failed: %v", err)
 	}
-	defer result.Close()
+		result := RequiresRowResult(t, res)
 
-	fds := result.FieldDescriptions()
+	defer result.Rows.Close()
+
+	fds := result.Rows.FieldDescriptions()
 	assert.NotNil(t, fds)
 
 	columnsExpected := []string{
@@ -45,7 +47,7 @@ func TestListForeignTables(t *testing.T) {
 	assert.Len(t, fds, 4)
 
 	var allRows []map[string]interface{}
-	allRows, err = RowsToMaps(result)
+	allRows, err = RowsToMaps(result.Rows)
 	if err != nil {
 		t.Fatalf("Failed to read rows: %v", err)
 	}
@@ -69,13 +71,15 @@ func TestListForeignTablesWithPattern(t *testing.T) {
 	pattern := "foreign_*"
 	verbose := false
 
-	result, err := dbcommands.ListForeignTables(context.Background(), db, pattern, verbose)
+	res, err := dbcommands.ListForeignTables(context.Background(), db, pattern, verbose)
 	if err != nil {
 		t.Fatalf("ListForeignTables failed: %v", err)
 	}
-	defer result.Close()
+		result := RequiresRowResult(t, res)
 
-	fds := result.FieldDescriptions()
+	defer result.Rows.Close()
+
+	fds := result.Rows.FieldDescriptions()
 	assert.NotNil(t, fds)
 
 	columnsExpected := []string{
@@ -89,7 +93,7 @@ func TestListForeignTablesWithPattern(t *testing.T) {
 	assert.Len(t, fds, 4)
 
 	var allRows []map[string]interface{}
-	allRows, err = RowsToMaps(result)
+	allRows, err = RowsToMaps(result.Rows)
 	if err != nil {
 		t.Fatalf("Failed to read rows: %v", err)
 	}
@@ -110,13 +114,15 @@ func TestListForeignTablesWithNoMatchingPattern(t *testing.T) {
 	pattern := "foreign_x*"
 	verbose := false
 
-	result, err := dbcommands.ListForeignTables(context.Background(), db, pattern, verbose)
+	res, err := dbcommands.ListForeignTables(context.Background(), db, pattern, verbose)
 	if err != nil {
 		t.Fatalf("ListForeignTables failed: %v", err)
 	}
-	defer result.Close()
+		result := RequiresRowResult(t, res)
 
-	fds := result.FieldDescriptions()
+	defer result.Rows.Close()
+
+	fds := result.Rows.FieldDescriptions()
 	assert.NotNil(t, fds)
 
 	columnsExpected := []string{
@@ -130,7 +136,7 @@ func TestListForeignTablesWithNoMatchingPattern(t *testing.T) {
 	assert.Len(t, fds, 4)
 
 	var allRows []map[string]interface{}
-	allRows, err = RowsToMaps(result)
+	allRows, err = RowsToMaps(result.Rows)
 	if err != nil {
 		t.Fatalf("Failed to read rows: %v", err)
 	}
@@ -151,13 +157,15 @@ func TestListForeignTablesVerbose(t *testing.T) {
 	pattern := ""
 	verbose := true
 
-	result, err := dbcommands.ListForeignTables(context.Background(), db, pattern, verbose)
+	res, err := dbcommands.ListForeignTables(context.Background(), db, pattern, verbose)
 	if err != nil {
 		t.Fatalf("ListForeignTables failed: %v", err)
 	}
-	defer result.Close()
+		result := RequiresRowResult(t, res)
 
-	fds := result.FieldDescriptions()
+	defer result.Rows.Close()
+
+	fds := result.Rows.FieldDescriptions()
 	assert.NotNil(t, fds)
 
 	columnsExpected := []string{
@@ -173,7 +181,7 @@ func TestListForeignTablesVerbose(t *testing.T) {
 	assert.Len(t, fds, 6)
 
 	var allRows []map[string]interface{}
-	allRows, err = RowsToMaps(result)
+	allRows, err = RowsToMaps(result.Rows)
 	if err != nil {
 		t.Fatalf("Failed to read rows: %v", err)
 	}
@@ -194,13 +202,15 @@ func TestListForeignTablesVerboseWithPattern(t *testing.T) {
 	pattern := "foreign_*"
 	verbose := true
 
-	result, err := dbcommands.ListForeignTables(context.Background(), db, pattern, verbose)
+	res, err := dbcommands.ListForeignTables(context.Background(), db, pattern, verbose)
 	if err != nil {
 		t.Fatalf("ListForeignTables failed: %v", err)
 	}
-	defer result.Close()
+		result := RequiresRowResult(t, res)
 
-	fds := result.FieldDescriptions()
+	defer result.Rows.Close()
+
+	fds := result.Rows.FieldDescriptions()
 	assert.NotNil(t, fds)
 
 	columnsExpected := []string{
@@ -216,7 +226,7 @@ func TestListForeignTablesVerboseWithPattern(t *testing.T) {
 	assert.Len(t, fds, 6)
 
 	var allRows []map[string]interface{}
-	allRows, err = RowsToMaps(result)
+	allRows, err = RowsToMaps(result.Rows)
 	if err != nil {
 		t.Fatalf("Failed to read rows: %v", err)
 	}
@@ -237,13 +247,15 @@ func TestListForeignTablesVerboseWithNoMatchingPattern(t *testing.T) {
 	pattern := "foreign_x*"
 	verbose := true
 
-	result, err := dbcommands.ListForeignTables(context.Background(), db, pattern, verbose)
+	res, err := dbcommands.ListForeignTables(context.Background(), db, pattern, verbose)
 	if err != nil {
 		t.Fatalf("ListForeignTables failed: %v", err)
 	}
-	defer result.Close()
+		result := RequiresRowResult(t, res)
 
-	fds := result.FieldDescriptions()
+	defer result.Rows.Close()
+
+	fds := result.Rows.FieldDescriptions()
 	assert.NotNil(t, fds)
 
 	columnsExpected := []string{
@@ -259,7 +271,7 @@ func TestListForeignTablesVerboseWithNoMatchingPattern(t *testing.T) {
 	assert.Len(t, fds, 6)
 
 	var allRows []map[string]interface{}
-	allRows, err = RowsToMaps(result)
+	allRows, err = RowsToMaps(result.Rows)
 	if err != nil {
 		t.Fatalf("Failed to read rows: %v", err)
 	}

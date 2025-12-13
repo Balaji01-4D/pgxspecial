@@ -5,11 +5,11 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/balaji01-4d/pgxspecial"
 	"github.com/balaji01-4d/pgxspecial/database"
-	"github.com/jackc/pgx/v5"
 )
 
-func ListDomains(ctx context.Context, db database.Queryer, pattern string, verbose bool) (pgx.Rows, error) {
+func ListDomains(ctx context.Context, db database.Queryer, pattern string, verbose bool) (pgxspecial.SpecialCommandResult, error) {
 	var sb strings.Builder
 	args := []any{}
 	argIndex := 1
@@ -79,5 +79,10 @@ func ListDomains(ctx context.Context, db database.Queryer, pattern string, verbo
 		}
 	}
 	sb.WriteString("ORDER BY 1, 2;")
-	return db.Query(ctx, sb.String(), args...)
+	rows, err := db.Query(ctx, sb.String(), args...)
+	if err != nil {
+		return nil, err
+	}
+
+	return pgxspecial.RowResult{Rows: rows}, nil
 }

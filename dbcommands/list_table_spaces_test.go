@@ -16,13 +16,15 @@ func TestListTablespaces(t *testing.T) {
 	pattern := ""
 	verbose := false
 
-	result, err := dbcommands.ListTablespaces(context.Background(), db, pattern, verbose)
+	res, err := dbcommands.ListTablespaces(context.Background(), db, pattern, verbose)
 	if err != nil {
 		t.Fatalf("ListTablespaces failed: %v", err)
 	}
-	defer result.Close()
+		result := RequiresRowResult(t, res)
 
-	fds := result.FieldDescriptions()
+	defer result.Rows.Close()
+
+	fds := result.Rows.FieldDescriptions()
 	assert.NotNil(t, fds)
 
 	columnsExpected := []string{
@@ -36,7 +38,7 @@ func TestListTablespaces(t *testing.T) {
 	assert.Len(t, fds, 3)
 
 	var allRows []map[string]interface{}
-	allRows, err = RowsToMaps(result)
+	allRows, err = RowsToMaps(result.Rows)
 	if err != nil {
 		t.Fatalf("Failed to read rows: %v", err)
 	}
@@ -51,13 +53,15 @@ func TestListTablespacesWithPattern(t *testing.T) {
 	pattern := "pg_d*"
 	verbose := false
 
-	result, err := dbcommands.ListTablespaces(context.Background(), db, pattern, verbose)
+	res, err := dbcommands.ListTablespaces(context.Background(), db, pattern, verbose)
 	if err != nil {
 		t.Fatalf("ListTablespaces failed: %v", err)
 	}
-	defer result.Close()
+		result := RequiresRowResult(t, res)
 
-	fds := result.FieldDescriptions()
+	defer result.Rows.Close()
+
+	fds := result.Rows.FieldDescriptions()
 	assert.NotNil(t, fds)
 
 	columnsExpected := []string{
@@ -71,7 +75,7 @@ func TestListTablespacesWithPattern(t *testing.T) {
 	assert.Len(t, fds, 3)
 
 	var allRows []map[string]interface{}
-	allRows, err = RowsToMaps(result)
+	allRows, err = RowsToMaps(result.Rows)
 	if err != nil {
 		t.Fatalf("Failed to read rows: %v", err)
 	}
@@ -87,13 +91,15 @@ func TestListTablespacesWithInvalidPattern(t *testing.T) {
 	pattern := "pg_xd*"
 	verbose := false
 
-	result, err := dbcommands.ListTablespaces(context.Background(), db, pattern, verbose)
+	res, err := dbcommands.ListTablespaces(context.Background(), db, pattern, verbose)
 	if err != nil {
 		t.Fatalf("ListTablespaces failed: %v", err)
 	}
-	defer result.Close()
+		result := RequiresRowResult(t, res)
 
-	fds := result.FieldDescriptions()
+	defer result.Rows.Close()
+
+	fds := result.Rows.FieldDescriptions()
 	assert.NotNil(t, fds)
 
 	columnsExpected := []string{
@@ -107,7 +113,7 @@ func TestListTablespacesWithInvalidPattern(t *testing.T) {
 	assert.Len(t, fds, 3)
 
 	var allRows []map[string]interface{}
-	allRows, err = RowsToMaps(result)
+	allRows, err = RowsToMaps(result.Rows)
 	if err != nil {
 		t.Fatalf("Failed to read rows: %v", err)
 	}

@@ -7,7 +7,6 @@ import (
 
 	"github.com/balaji01-4d/pgxspecial"
 	"github.com/balaji01-4d/pgxspecial/database"
-	"github.com/jackc/pgx/v5"
 )
 
 func init() {
@@ -20,7 +19,7 @@ func init() {
 	})
 }
 
-func ListTablespaces(ctx context.Context, db database.Queryer, pattern string, verbose bool) (pgx.Rows, error) {
+func ListTablespaces(ctx context.Context, db database.Queryer, pattern string, verbose bool) (pgxspecial.SpecialCommandResult, error) {
 	var sb strings.Builder
 	args := []any{}
 	argIndex := 1
@@ -60,7 +59,7 @@ func ListTablespaces(ctx context.Context, db database.Queryer, pattern string, v
 	}
 
 	sb.WriteString(" ORDER BY 1;")
-	rowsResult, err := db.Query(ctx, sb.String(), args...)
-	return rowsResult, err
+	rowResult, err := db.Query(ctx, sb.String(), args...)
+	return pgxspecial.RowResult{Rows: rowResult}, err
 
 }

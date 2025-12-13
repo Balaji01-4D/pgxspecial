@@ -22,13 +22,15 @@ func TestListSchemas(t *testing.T) {
 		defer DropSchema(t, context.Background(), db.(*pgxpool.Pool), schema)
 	}
 
-	result, err := dbcommands.ListSchemas(context.Background(), db, pattern, verbose)
+	res, err := dbcommands.ListSchemas(context.Background(), db, pattern, verbose)
 	if err != nil {
 		t.Fatalf("ListSchemas failed: %v", err)
 	}
-	defer result.Close()
+		result := RequiresRowResult(t, res)
 
-	fds := result.FieldDescriptions()
+	defer result.Rows.Close()
+
+	fds := result.Rows.FieldDescriptions()
 	assert.NotNil(t, fds)
 
 	columnsExpected := []string{
@@ -39,7 +41,7 @@ func TestListSchemas(t *testing.T) {
 	assert.Len(t, fds, 2)
 
 	var allRows []map[string]interface{}
-	allRows, err = RowsToMaps(result)
+	allRows, err = RowsToMaps(result.Rows)
 	if err != nil {
 		t.Fatalf("Failed to read rows: %v", err)
 	}
@@ -62,13 +64,15 @@ func TestListSchemasWithPattern(t *testing.T) {
 		defer DropSchema(t, context.Background(), db.(*pgxpool.Pool), schema)
 	}
 
-	result, err := dbcommands.ListSchemas(context.Background(), db, pattern, verbose)
+	res, err := dbcommands.ListSchemas(context.Background(), db, pattern, verbose)
 	if err != nil {
 		t.Fatalf("ListSchemas failed: %v", err)
 	}
-	defer result.Close()
+		result := RequiresRowResult(t, res)
 
-	fds := result.FieldDescriptions()
+	defer result.Rows.Close()
+
+	fds := result.Rows.FieldDescriptions()
 	assert.NotNil(t, fds)
 
 	columnsExpected := []string{
@@ -79,7 +83,7 @@ func TestListSchemasWithPattern(t *testing.T) {
 	assert.Len(t, fds, 2)
 
 	var allRows []map[string]interface{}
-	allRows, err = RowsToMaps(result)
+	allRows, err = RowsToMaps(result.Rows)
 	if err != nil {
 		t.Fatalf("Failed to read rows: %v", err)
 	}
@@ -96,13 +100,15 @@ func TestListSchemasWithNoMatchingPattern(t *testing.T) {
 	pattern := "non_existing_schema"
 	verbose := false
 
-	result, err := dbcommands.ListSchemas(context.Background(), db, pattern, verbose)
+	res, err := dbcommands.ListSchemas(context.Background(), db, pattern, verbose)
 	if err != nil {
 		t.Fatalf("ListSchemas failed: %v", err)
 	}
-	defer result.Close()
+		result := RequiresRowResult(t, res)
 
-	fds := result.FieldDescriptions()
+	defer result.Rows.Close()
+
+	fds := result.Rows.FieldDescriptions()
 	assert.NotNil(t, fds)
 
 	columnsExpected := []string{
@@ -113,7 +119,7 @@ func TestListSchemasWithNoMatchingPattern(t *testing.T) {
 	assert.Len(t, fds, 2)
 
 	var allRows []map[string]interface{}
-	allRows, err = RowsToMaps(result)
+	allRows, err = RowsToMaps(result.Rows)
 	if err != nil {
 		t.Fatalf("Failed to read rows: %v", err)
 	}
@@ -133,13 +139,15 @@ func TestListSchemasVerbose(t *testing.T) {
 		defer DropSchema(t, context.Background(), db.(*pgxpool.Pool), schema)
 	}
 
-	result, err := dbcommands.ListSchemas(context.Background(), db, pattern, verbose)
+	res, err := dbcommands.ListSchemas(context.Background(), db, pattern, verbose)
 	if err != nil {
 		t.Fatalf("ListSchemas failed: %v", err)
 	}
-	defer result.Close()
+		result := RequiresRowResult(t, res)
 
-	fds := result.FieldDescriptions()
+	defer result.Rows.Close()
+
+	fds := result.Rows.FieldDescriptions()
 	assert.NotNil(t, fds)
 
 	columnsExpected := []string{
@@ -152,7 +160,7 @@ func TestListSchemasVerbose(t *testing.T) {
 	assert.Len(t, fds, 4)
 
 	var allRows []map[string]interface{}
-	allRows, err = RowsToMaps(result)
+	allRows, err = RowsToMaps(result.Rows)
 	if err != nil {
 		t.Fatalf("Failed to read rows: %v", err)
 	}
@@ -172,13 +180,15 @@ func TestListSchemasWithPatternVerbose(t *testing.T) {
 		defer DropSchema(t, context.Background(), db.(*pgxpool.Pool), schema)
 	}
 
-	result, err := dbcommands.ListSchemas(context.Background(), db, pattern, verbose)
+	res, err := dbcommands.ListSchemas(context.Background(), db, pattern, verbose)
 	if err != nil {
 		t.Fatalf("ListSchemas failed: %v", err)
 	}
-	defer result.Close()
+		result := RequiresRowResult(t, res)
 
-	fds := result.FieldDescriptions()
+	defer result.Rows.Close()
+
+	fds := result.Rows.FieldDescriptions()
 	assert.NotNil(t, fds)
 
 	columnsExpected := []string{
@@ -191,7 +201,7 @@ func TestListSchemasWithPatternVerbose(t *testing.T) {
 	assert.Len(t, fds, 4)
 
 	var allRows []map[string]interface{}
-	allRows, err = RowsToMaps(result)
+	allRows, err = RowsToMaps(result.Rows)
 	if err != nil {
 		t.Fatalf("Failed to read rows: %v", err)
 	}
@@ -204,13 +214,15 @@ func TestListSchemasWithNoMatchingPatternVerbose(t *testing.T) {
 
 	pattern := "non_existing_schema"
 	verbose := true
-	result, err := dbcommands.ListSchemas(context.Background(), db, pattern, verbose)
+	res, err := dbcommands.ListSchemas(context.Background(), db, pattern, verbose)
 	if err != nil {
 		t.Fatalf("ListSchemas failed: %v", err)
 	}
-	defer result.Close()
+		result := RequiresRowResult(t, res)
 
-	fds := result.FieldDescriptions()
+	defer result.Rows.Close()
+
+	fds := result.Rows.FieldDescriptions()
 	assert.NotNil(t, fds)
 
 	columnsExpected := []string{
@@ -223,7 +235,7 @@ func TestListSchemasWithNoMatchingPatternVerbose(t *testing.T) {
 	assert.Len(t, fds, 4)
 
 	var allRows []map[string]interface{}
-	allRows, err = RowsToMaps(result)
+	allRows, err = RowsToMaps(result.Rows)
 	if err != nil {
 		t.Fatalf("Failed to read rows: %v", err)
 	}

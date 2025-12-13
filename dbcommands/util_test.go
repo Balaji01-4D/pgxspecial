@@ -7,6 +7,7 @@ import (
 	"os"
 	"testing"
 
+	"github.com/balaji01-4d/pgxspecial"
 	"github.com/balaji01-4d/pgxspecial/database"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgconn"
@@ -318,4 +319,20 @@ func containsByField(rows []map[string]interface{}, field, expected string) bool
 		}
 	}
 	return false
+}
+
+
+func RequiresRowResult(t *testing.T, r pgxspecial.SpecialCommandResult) pgxspecial.RowResult{
+	t.Helper()
+
+	if r.ResultKind() != pgxspecial.ResultKindRows {
+		t.Fatalf("expected rows result, got %v", r.ResultKind())
+	}
+
+	rowsResult, ok := r.(pgxspecial.RowResult)
+	if !ok {
+		t.Fatalf("expected QueryRowsResult, got %T", r)
+	}
+
+	return rowsResult
 }

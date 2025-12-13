@@ -62,13 +62,15 @@ func TestListDomains(t *testing.T) {
 		CreateDomain(t, ctx, db.(*pgxpool.Pool), domain.name, domain.baseType)
 		defer DropDomain(t, ctx, db.(*pgxpool.Pool), domain.name)
 	}
-	result, err := dbcommands.ListDomains(context.Background(), db, pattern, verbose)
+	res, err := dbcommands.ListDomains(context.Background(), db, pattern, verbose)
 	if err != nil {
 		t.Fatalf("ListDomains failed: %v", err)
 	}
-	defer result.Close()
+		result := RequiresRowResult(t, res)
 
-	fds := result.FieldDescriptions()
+	defer result.Rows.Close()
+
+	fds := result.Rows.FieldDescriptions()
 
 	expectedColumns := []string{
 		"schema",
@@ -81,7 +83,7 @@ func TestListDomains(t *testing.T) {
 	// expecting 5 columns
 	assert.Len(t, fds, 5)
 	var allRows []map[string]interface{}
-	allRows, err = RowsToMaps(result)
+	allRows, err = RowsToMaps(result.Rows)
 	if err != nil {
 		t.Fatalf("Failed to read rows: %v", err)
 	}
@@ -113,13 +115,15 @@ func TestListDomainsWithPattern(t *testing.T) {
 		CreateDomain(t, ctx, db.(*pgxpool.Pool), domain.name, domain.baseType)
 		defer DropDomain(t, ctx, db.(*pgxpool.Pool), domain.name)
 	}
-	result, err := dbcommands.ListDomains(context.Background(), db, pattern, verbose)
+	res, err := dbcommands.ListDomains(context.Background(), db, pattern, verbose)
 	if err != nil {
 		t.Fatalf("ListDomains failed: %v", err)
 	}
-	defer result.Close()
+		result := RequiresRowResult(t, res)
 
-	fds := result.FieldDescriptions()
+	defer result.Rows.Close()
+
+	fds := result.Rows.FieldDescriptions()
 
 	expectedColumns := []string{
 		"schema",
@@ -132,7 +136,7 @@ func TestListDomainsWithPattern(t *testing.T) {
 	// expecting 5 columns
 	assert.Len(t, fds, 5)
 	var allRows []map[string]interface{}
-	allRows, err = RowsToMaps(result)
+	allRows, err = RowsToMaps(result.Rows)
 	if err != nil {
 		t.Fatalf("Failed to read rows: %v", err)
 	}
@@ -164,13 +168,15 @@ func TestListDomainsWithNoMatchingPattern(t *testing.T) {
 		CreateDomain(t, ctx, db.(*pgxpool.Pool), domain.name, domain.baseType)
 		defer DropDomain(t, ctx, db.(*pgxpool.Pool), domain.name)
 	}
-	result, err := dbcommands.ListDomains(context.Background(), db, pattern, verbose)
+	res, err := dbcommands.ListDomains(context.Background(), db, pattern, verbose)
 	if err != nil {
 		t.Fatalf("ListDomains failed: %v", err)
 	}
-	defer result.Close()
+		result := RequiresRowResult(t, res)
 
-	fds := result.FieldDescriptions()
+	defer result.Rows.Close()
+
+	fds := result.Rows.FieldDescriptions()
 
 	expectedColumns := []string{
 		"schema",
@@ -183,7 +189,7 @@ func TestListDomainsWithNoMatchingPattern(t *testing.T) {
 	// expecting 5 columns
 	assert.Len(t, fds, 5)
 	var allRows []map[string]interface{}
-	allRows, err = RowsToMaps(result)
+	allRows, err = RowsToMaps(result.Rows)
 	if err != nil {
 		t.Fatalf("Failed to read rows: %v", err)
 	}
@@ -212,13 +218,15 @@ func TestListDomainsVerbose(t *testing.T) {
 		CreateDomain(t, ctx, db.(*pgxpool.Pool), domain.name, domain.baseType)
 		defer DropDomain(t, ctx, db.(*pgxpool.Pool), domain.name)
 	}
-	result, err := dbcommands.ListDomains(context.Background(), db, pattern, verbose)
+	res, err := dbcommands.ListDomains(context.Background(), db, pattern, verbose)
 	if err != nil {
 		t.Fatalf("ListDomains failed: %v", err)
 	}
-	defer result.Close()
+		result := RequiresRowResult(t, res)
 
-	fds := result.FieldDescriptions()
+	defer result.Rows.Close()
+
+	fds := result.Rows.FieldDescriptions()
 
 	expectedColumns := []string{
 		"schema",
@@ -233,7 +241,7 @@ func TestListDomainsVerbose(t *testing.T) {
 	// expecting 7 columns
 	assert.Len(t, fds, 7)
 	var allRows []map[string]interface{}
-	allRows, err = RowsToMaps(result)
+	allRows, err = RowsToMaps(result.Rows)
 	if err != nil {
 		t.Fatalf("Failed to read rows: %v", err)
 	}
@@ -265,13 +273,15 @@ func TestListDomainsVerboseWithPattern(t *testing.T) {
 		CreateDomain(t, ctx, db.(*pgxpool.Pool), domain.name, domain.baseType)
 		defer DropDomain(t, ctx, db.(*pgxpool.Pool), domain.name)
 	}
-	result, err := dbcommands.ListDomains(context.Background(), db, pattern, verbose)
+	res, err := dbcommands.ListDomains(context.Background(), db, pattern, verbose)
 	if err != nil {
 		t.Fatalf("ListDomains failed: %v", err)
 	}
-	defer result.Close()
+		result := RequiresRowResult(t, res)
 
-	fds := result.FieldDescriptions()
+	defer result.Rows.Close()
+
+	fds := result.Rows.FieldDescriptions()
 
 	expectedColumns := []string{
 		"schema",
@@ -286,7 +296,7 @@ func TestListDomainsVerboseWithPattern(t *testing.T) {
 	// expecting 7 columns
 	assert.Len(t, fds, 7)
 	var allRows []map[string]interface{}
-	allRows, err = RowsToMaps(result)
+	allRows, err = RowsToMaps(result.Rows)
 	if err != nil {
 		t.Fatalf("Failed to read rows: %v", err)
 	}
@@ -318,13 +328,15 @@ func TestListDomainsVerboseWithNoMatchingPattern(t *testing.T) {
 		CreateDomain(t, ctx, db.(*pgxpool.Pool), domain.name, domain.baseType)
 		defer DropDomain(t, ctx, db.(*pgxpool.Pool), domain.name)
 	}
-	result, err := dbcommands.ListDomains(context.Background(), db, pattern, verbose)
+	res, err := dbcommands.ListDomains(context.Background(), db, pattern, verbose)
 	if err != nil {
 		t.Fatalf("ListDomains failed: %v", err)
 	}
-	defer result.Close()
+		result := RequiresRowResult(t, res)
 
-	fds := result.FieldDescriptions()
+	defer result.Rows.Close()
+
+	fds := result.Rows.FieldDescriptions()
 
 	expectedColumns := []string{
 		"schema",
@@ -339,7 +351,7 @@ func TestListDomainsVerboseWithNoMatchingPattern(t *testing.T) {
 	// expecting 7 columns
 	assert.Len(t, fds, 7)
 	var allRows []map[string]interface{}
-	allRows, err = RowsToMaps(result)
+	allRows, err = RowsToMaps(result.Rows)
 	if err != nil {
 		t.Fatalf("Failed to read rows: %v", err)
 	}
@@ -373,13 +385,15 @@ func TestListDomainsWithSchema(t *testing.T) {
 		CreateDomain(t, ctx, db.(*pgxpool.Pool), domain.name, domain.baseType)
 		defer DropDomain(t, ctx, db.(*pgxpool.Pool), domain.name)
 	}
-	result, err := dbcommands.ListDomains(context.Background(), db, pattern, verbose)
+	res, err := dbcommands.ListDomains(context.Background(), db, pattern, verbose)
 	if err != nil {
 		t.Fatalf("ListDomains failed: %v", err)
 	}
-	defer result.Close()
+		result := RequiresRowResult(t, res)
 
-	fds := result.FieldDescriptions()
+	defer result.Rows.Close()
+
+	fds := result.Rows.FieldDescriptions()
 
 	expectedColumns := []string{
 		"schema",
@@ -392,7 +406,7 @@ func TestListDomainsWithSchema(t *testing.T) {
 	// expecting 5 columns
 	assert.Len(t, fds, 5)
 	var allRows []map[string]interface{}
-	allRows, err = RowsToMaps(result)
+	allRows, err = RowsToMaps(result.Rows)
 	if err != nil {
 		t.Fatalf("Failed to read rows: %v", err)
 	}

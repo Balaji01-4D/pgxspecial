@@ -23,13 +23,15 @@ func TestListPrivileges(t *testing.T) {
 	GrantPrivilege(t, ctx, pool, "SELECT", "test_tbl", "test_user")
 	defer RevokePrivilege(t, ctx, pool, "SELECT", "test_tbl", "test_user")
 
-	result, err := dbcommands.ListPrivileges(context.Background(), db, pattern, false)
+	res, err := dbcommands.ListPrivileges(context.Background(), db, pattern, false)
 	if err != nil {
 		t.Fatalf("ListPrivileges failed: %v", err)
 	}
-	defer result.Close()
+		result := RequiresRowResult(t, res)
 
-	fds := result.FieldDescriptions()
+	defer result.Rows.Close()
+
+	fds := result.Rows.FieldDescriptions()
 	assert.NotNil(t, fds)
 
 	columnsExpected := []string{
@@ -45,7 +47,7 @@ func TestListPrivileges(t *testing.T) {
 	assert.Len(t, fds, 6)
 
 	var allRows []map[string]interface{}
-	allRows, err = RowsToMaps(result)
+	allRows, err = RowsToMaps(result.Rows)
 	if err != nil {
 		t.Fatalf("Failed to read rows: %v", err)
 	}
