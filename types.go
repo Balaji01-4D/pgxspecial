@@ -8,6 +8,7 @@ type SpecialResultKind int
 const (
 	ResultKindRows SpecialResultKind = iota
 	ResultKindDescribeTable
+	ResultKindExtensionVerbose
 )
 
 // SpecialCommand represents a parsed and executable special command.
@@ -99,4 +100,17 @@ type DescribeTableListResult struct {
 
 func (DescribeTableListResult) ResultKind() SpecialResultKind {
 	return ResultKindDescribeTable
+}
+
+type ExtensionVerboseResult struct {
+	Name 		string
+	Description []string
+}
+
+type ExtensionVerboseListResult struct {
+	Results []ExtensionVerboseResult
+}
+
+func (ExtensionVerboseListResult) ResultKind() SpecialResultKind {
+	return ResultKindExtensionVerbose
 }
