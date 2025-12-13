@@ -29,7 +29,7 @@ func TestListForeignTables(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ListForeignTables failed: %v", err)
 	}
-		result := RequiresRowResult(t, res)
+	result := RequiresRowResult(t, res)
 
 	defer result.Rows.Close()
 
@@ -75,7 +75,7 @@ func TestListForeignTablesWithPattern(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ListForeignTables failed: %v", err)
 	}
-		result := RequiresRowResult(t, res)
+	result := RequiresRowResult(t, res)
 
 	defer result.Rows.Close()
 
@@ -118,7 +118,7 @@ func TestListForeignTablesWithNoMatchingPattern(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ListForeignTables failed: %v", err)
 	}
-		result := RequiresRowResult(t, res)
+	result := RequiresRowResult(t, res)
 
 	defer result.Rows.Close()
 
@@ -161,7 +161,7 @@ func TestListForeignTablesVerbose(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ListForeignTables failed: %v", err)
 	}
-		result := RequiresRowResult(t, res)
+	result := RequiresRowResult(t, res)
 
 	defer result.Rows.Close()
 
@@ -206,7 +206,7 @@ func TestListForeignTablesVerboseWithPattern(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ListForeignTables failed: %v", err)
 	}
-		result := RequiresRowResult(t, res)
+	result := RequiresRowResult(t, res)
 
 	defer result.Rows.Close()
 
@@ -251,7 +251,7 @@ func TestListForeignTablesVerboseWithNoMatchingPattern(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ListForeignTables failed: %v", err)
 	}
-		result := RequiresRowResult(t, res)
+	result := RequiresRowResult(t, res)
 
 	defer result.Rows.Close()
 

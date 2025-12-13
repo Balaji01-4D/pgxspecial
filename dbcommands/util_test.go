@@ -321,7 +321,6 @@ func containsByField(rows []map[string]interface{}, field, expected string) bool
 	return false
 }
 
-
 func RequiresRowResult(t *testing.T, r pgxspecial.SpecialCommandResult) pgxspecial.RowResult {
 	t.Helper()
 

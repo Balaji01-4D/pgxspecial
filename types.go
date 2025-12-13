@@ -93,7 +93,6 @@ func (DescribeTableResult) ResultKind() SpecialResultKind {
 	return ResultKindDescribeTable
 }
 
-
 type DescribeTableListResult struct {
 	Results []DescribeTableResult
 }
@@ -103,7 +102,7 @@ func (DescribeTableListResult) ResultKind() SpecialResultKind {
 }
 
 type ExtensionVerboseResult struct {
-	Name 		string
+	Name        string
 	Description []string
 }
 

@@ -28,7 +28,7 @@ func TestListFunctions(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ListFunctions failed: %v", err)
 	}
-		result := RequiresRowResult(t, res)
+	result := RequiresRowResult(t, res)
 
 	defer result.Rows.Close()
 
@@ -74,7 +74,7 @@ func TestListFunctionsWithPattern(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ListFunctions failed: %v", err)
 	}
-		result := RequiresRowResult(t, res)
+	result := RequiresRowResult(t, res)
 
 	defer result.Rows.Close()
 
@@ -121,7 +121,7 @@ func TestListFunctionsWithNoMatchingPattern(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ListFunctions failed: %v", err)
 	}
-		result := RequiresRowResult(t, res)
+	result := RequiresRowResult(t, res)
 
 	defer result.Rows.Close()
 
@@ -166,7 +166,7 @@ func TestListFunctionsVerbose(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ListFunctions failed: %v", err)
 	}
-		result := RequiresRowResult(t, res)
+	result := RequiresRowResult(t, res)
 
 	defer result.Rows.Close()
 
@@ -218,7 +218,7 @@ func TestListFunctionsVerboseWithPattern(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ListFunctions failed: %v", err)
 	}
-		result := RequiresRowResult(t, res)
+	result := RequiresRowResult(t, res)
 
 	defer result.Rows.Close()
 
@@ -270,7 +270,7 @@ func TestListFunctionsVerboseWithNoMatchingPattern(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ListFunctions failed: %v", err)
 	}
-		result := RequiresRowResult(t, res)
+	result := RequiresRowResult(t, res)
 
 	defer result.Rows.Close()
 

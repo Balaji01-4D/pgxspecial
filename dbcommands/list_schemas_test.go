@@ -26,7 +26,7 @@ func TestListSchemas(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ListSchemas failed: %v", err)
 	}
-		result := RequiresRowResult(t, res)
+	result := RequiresRowResult(t, res)
 
 	defer result.Rows.Close()
 
@@ -68,7 +68,7 @@ func TestListSchemasWithPattern(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ListSchemas failed: %v", err)
 	}
-		result := RequiresRowResult(t, res)
+	result := RequiresRowResult(t, res)
 
 	defer result.Rows.Close()
 
@@ -104,7 +104,7 @@ func TestListSchemasWithNoMatchingPattern(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ListSchemas failed: %v", err)
 	}
-		result := RequiresRowResult(t, res)
+	result := RequiresRowResult(t, res)
 
 	defer result.Rows.Close()
 
@@ -143,7 +143,7 @@ func TestListSchemasVerbose(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ListSchemas failed: %v", err)
 	}
-		result := RequiresRowResult(t, res)
+	result := RequiresRowResult(t, res)
 
 	defer result.Rows.Close()
 
@@ -184,7 +184,7 @@ func TestListSchemasWithPatternVerbose(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ListSchemas failed: %v", err)
 	}
-		result := RequiresRowResult(t, res)
+	result := RequiresRowResult(t, res)
 
 	defer result.Rows.Close()
 
@@ -218,7 +218,7 @@ func TestListSchemasWithNoMatchingPatternVerbose(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ListSchemas failed: %v", err)
 	}
-		result := RequiresRowResult(t, res)
+	result := RequiresRowResult(t, res)
 
 	defer result.Rows.Close()
 

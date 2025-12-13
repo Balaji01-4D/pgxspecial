@@ -20,7 +20,7 @@ func TestListTablespaces(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ListTablespaces failed: %v", err)
 	}
-		result := RequiresRowResult(t, res)
+	result := RequiresRowResult(t, res)
 
 	defer result.Rows.Close()
 
@@ -57,7 +57,7 @@ func TestListTablespacesWithPattern(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ListTablespaces failed: %v", err)
 	}
-		result := RequiresRowResult(t, res)
+	result := RequiresRowResult(t, res)
 
 	defer result.Rows.Close()
 
@@ -95,7 +95,7 @@ func TestListTablespacesWithInvalidPattern(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ListTablespaces failed: %v", err)
 	}
-		result := RequiresRowResult(t, res)
+	result := RequiresRowResult(t, res)
 
 	defer result.Rows.Close()
 

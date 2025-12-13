@@ -11,7 +11,7 @@ import (
 
 func TestListObjects(t *testing.T) {
 	db := connectTestDB(t).(*pgxpool.Pool)
-	
+
 	defer db.Close()
 
 	// Ensure we have at least one table
@@ -31,7 +31,7 @@ func TestListObjects(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ListObjects failed: %v", err)
 	}
-		result := RequiresRowResult(t, res)
+	result := RequiresRowResult(t, res)
 
 	defer result.Rows.Close()
 
@@ -52,7 +52,7 @@ func TestListPrivilegesWithPattern(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ListPrivileges with pattern failed: %v", err)
 	}
-		result := RequiresRowResult(t, res)
+	result := RequiresRowResult(t, res)
 
 	defer result.Rows.Close()
 
@@ -69,7 +69,7 @@ func TestListDefaultPrivilegesWithPattern(t *testing.T) {
 	// or just test the query generation logic with a pattern.
 	pattern := "public"
 	res, err := dbcommands.ListDefaultPrivileges(context.Background(), db, pattern, false)
-		result := RequiresRowResult(t, res)
+	result := RequiresRowResult(t, res)
 
 	if err != nil {
 		t.Fatalf("ListDefaultPrivileges with pattern failed: %v", err)

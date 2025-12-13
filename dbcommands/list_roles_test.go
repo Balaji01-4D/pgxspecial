@@ -20,7 +20,7 @@ func TestListRoles(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ListRoles failed: %v", err)
 	}
-		result := RequiresRowResult(t, res)
+	result := RequiresRowResult(t, res)
 
 	defer result.Rows.Close()
 
@@ -72,7 +72,7 @@ func TestListRolesWithPattern(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ListRoles failed: %v", err)
 	}
-		result := RequiresRowResult(t, res)
+	result := RequiresRowResult(t, res)
 
 	defer result.Rows.Close()
 
@@ -121,7 +121,7 @@ func TestListRolesWithNoMatchingPattern(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ListRoles failed: %v", err)
 	}
-		result := RequiresRowResult(t, res)
+	result := RequiresRowResult(t, res)
 
 	defer result.Rows.Close()
 
@@ -163,7 +163,7 @@ func TestListRolesWithPatternVerbose(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ListRoles failed: %v", err)
 	}
-		result := RequiresRowResult(t, res)
+	result := RequiresRowResult(t, res)
 
 	defer result.Rows.Close()
 
@@ -213,7 +213,7 @@ func TestListRolesWithNoMatchingPatternVerbose(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ListRoles failed: %v", err)
 	}
-		result := RequiresRowResult(t, res)
+	result := RequiresRowResult(t, res)
 
 	defer result.Rows.Close()
 

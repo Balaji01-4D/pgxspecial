@@ -12,25 +12,25 @@ import (
 
 func init() {
 	pgxspecial.RegisterCommand(pgxspecial.SpecialCommandRegistry{
-		Cmd:         "\\d",
-		Description: "List or describe tables, views and sequences.",
-		Syntax:      "\\d[+] [pattern]",
-		Handler: DescribeTableDetails,
+		Cmd:           "\\d",
+		Description:   "List or describe tables, views and sequences.",
+		Syntax:        "\\d[+] [pattern]",
+		Handler:       DescribeTableDetails,
 		CaseSensitive: true,
 	})
 
 	pgxspecial.RegisterCommand(pgxspecial.SpecialCommandRegistry{
-		Cmd:         "DESCRIBE",
-		Description: "",
-		Syntax:      "DESCRIBE [pattern]",
-		Handler: DescribeTableDetails,
+		Cmd:           "DESCRIBE",
+		Description:   "",
+		Syntax:        "DESCRIBE [pattern]",
+		Handler:       DescribeTableDetails,
 		CaseSensitive: false,
 	})
 }
 
 func DescribeTableDetails(ctx context.Context, db database.Queryer, pattern string, verbose bool) (pgxspecial.SpecialCommandResult, error) {
 	if pattern == "" {
-		return  ListObjects(ctx, db, "", verbose, []string{"r", "p", "v", "m", "S", "f", ""})
+		return ListObjects(ctx, db, "", verbose, []string{"r", "p", "v", "m", "S", "f", ""})
 	}
 
 	schema, relname := sqlNamePattern(pattern)

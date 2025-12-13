@@ -51,7 +51,7 @@ func TestShowFunctionDefinition(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ShowFunctionDefinition failed: %v", err)
 	}
-		result := RequiresRowResult(t, res)
+	result := RequiresRowResult(t, res)
 	defer result.Rows.Close()
 
 	var source string
@@ -96,7 +96,7 @@ func TestShowFunctionDefinitionVerbose(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ShowFunctionDefinition with verbose failed: %v", err)
 	}
-		result := RequiresRowResult(t, res)
+	result := RequiresRowResult(t, res)
 	defer result.Rows.Close()
 
 	var source string

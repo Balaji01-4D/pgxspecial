@@ -66,7 +66,7 @@ func TestListDomains(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ListDomains failed: %v", err)
 	}
-		result := RequiresRowResult(t, res)
+	result := RequiresRowResult(t, res)
 
 	defer result.Rows.Close()
 
@@ -119,7 +119,7 @@ func TestListDomainsWithPattern(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ListDomains failed: %v", err)
 	}
-		result := RequiresRowResult(t, res)
+	result := RequiresRowResult(t, res)
 
 	defer result.Rows.Close()
 
@@ -172,7 +172,7 @@ func TestListDomainsWithNoMatchingPattern(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ListDomains failed: %v", err)
 	}
-		result := RequiresRowResult(t, res)
+	result := RequiresRowResult(t, res)
 
 	defer result.Rows.Close()
 
@@ -222,7 +222,7 @@ func TestListDomainsVerbose(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ListDomains failed: %v", err)
 	}
-		result := RequiresRowResult(t, res)
+	result := RequiresRowResult(t, res)
 
 	defer result.Rows.Close()
 
@@ -277,7 +277,7 @@ func TestListDomainsVerboseWithPattern(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ListDomains failed: %v", err)
 	}
-		result := RequiresRowResult(t, res)
+	result := RequiresRowResult(t, res)
 
 	defer result.Rows.Close()
 
@@ -332,7 +332,7 @@ func TestListDomainsVerboseWithNoMatchingPattern(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ListDomains failed: %v", err)
 	}
-		result := RequiresRowResult(t, res)
+	result := RequiresRowResult(t, res)
 
 	defer result.Rows.Close()
 
@@ -389,7 +389,7 @@ func TestListDomainsWithSchema(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ListDomains failed: %v", err)
 	}
-		result := RequiresRowResult(t, res)
+	result := RequiresRowResult(t, res)
 
 	defer result.Rows.Close()
 

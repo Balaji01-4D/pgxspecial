@@ -27,7 +27,7 @@ func TestListPrivileges(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ListPrivileges failed: %v", err)
 	}
-		result := RequiresRowResult(t, res)
+	result := RequiresRowResult(t, res)
 
 	defer result.Rows.Close()
 

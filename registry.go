@@ -62,7 +62,6 @@ func RegisterCommand(cmdRegistry SpecialCommandRegistry) {
 // \command - actual special command
 // \command[+] - actual special command with verbose mode
 //
-//
 // A special command is identified by a leading backslash (`\`). If the input does not
 // start with a backslash, ExecuteSpecialCommand returns (nil, false, nil) to indicate
 // that the input should be treated as a normal query.

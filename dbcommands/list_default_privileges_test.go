@@ -12,9 +12,8 @@ import (
 func TestListDefaultPrivileges(t *testing.T) {
 	queryer := connectTestDB(t)
 	db := queryer.(*pgxpool.Pool)
-	
-	defer db.Close()
 
+	defer db.Close()
 
 	pattern := ""
 
@@ -30,7 +29,7 @@ func TestListDefaultPrivileges(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ListDefaultPrivileges failed: %v", err)
 	}
-		result := RequiresRowResult(t, res)
+	result := RequiresRowResult(t, res)
 
 	defer result.Rows.Close()
 

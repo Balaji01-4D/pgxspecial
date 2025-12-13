@@ -21,7 +21,7 @@ func TestListExtensions(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ListExtensions failed: %v", err)
 	}
-		result := RequiresRowResult(t, res)
+	result := RequiresRowResult(t, res)
 
 	defer result.Rows.Close()
 
@@ -29,7 +29,7 @@ func TestListExtensions(t *testing.T) {
 	if fds == nil {
 		t.Fatalf("FieldDescriptions is nil")
 	}
-	
+
 	columnsExpected := []string{
 		"name",
 		"version",
@@ -40,14 +40,13 @@ func TestListExtensions(t *testing.T) {
 	assert.Len(t, fds, 4, "Expected 4 columns")
 	assert.Equal(t, columnsExpected, getColumnNames(fds), "Column names do not match expected")
 
-
 	var allRows []map[string]interface{}
 	allRows, err = RowsToMaps(result.Rows)
 	if err != nil {
 		t.Fatalf("Failed to read rows: %v", err)
 	}
 	assert.Greater(t, len(allRows), 0, "Expected at least one extension")
-	assert.True(t, containsByField(allRows, "name", "plpgsql"), "Expected to find 'plpgsql' extension")	
+	assert.True(t, containsByField(allRows, "name", "plpgsql"), "Expected to find 'plpgsql' extension")
 
 }
 
@@ -61,7 +60,7 @@ func TestListExtensionsWithPattern(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ListExtensions failed: %v", err)
 	}
-		result := RequiresRowResult(t, res)
+	result := RequiresRowResult(t, res)
 
 	defer result.Rows.Close()
 
@@ -86,9 +85,8 @@ func TestListExtensionsWithPattern(t *testing.T) {
 		t.Fatalf("Failed to read rows: %v", err)
 	}
 	assert.Greater(t, len(allRows), 0, "Expected at least one extension")
-	assert.True(t, containsByField(allRows, "name", "plpgsql"), "Expected to find 'plpgsql' extension")	
+	assert.True(t, containsByField(allRows, "name", "plpgsql"), "Expected to find 'plpgsql' extension")
 }
-
 
 func TestListExtensionsVerbose(t *testing.T) {
 
@@ -104,10 +102,10 @@ func TestListExtensionsVerbose(t *testing.T) {
 	if res.ResultKind() != pgxspecial.ResultKindExtensionVerbose {
 		t.Fatalf("Expected ResultKindExtensionVerbose, got %v", res.ResultKind())
 	}
-		result, ok := res.(pgxspecial.ExtensionVerboseListResult)
-		if !ok {
-			t.Fatalf("Expected ExtensionVerboseListResult, got %T", res)
-		}
+	result, ok := res.(pgxspecial.ExtensionVerboseListResult)
+	if !ok {
+		t.Fatalf("Expected ExtensionVerboseListResult, got %T", res)
+	}
 
 	assert.Greater(t, len(result.Results), 0, "Expected at least one extension")
 	found := false

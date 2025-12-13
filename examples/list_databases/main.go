@@ -12,7 +12,6 @@ import (
 func main() {
 	// This example demonstrates how to list all databases in a PostgreSQL server using the pgx library.
 
-	
 	ctx := context.Background()
 	dbpool, err := pgxpool.New(ctx, "postgres://balaji:balaji2005@localhost:5432/postgres")
 	if err != nil {
@@ -21,7 +20,7 @@ func main() {
 	defer dbpool.Close()
 
 	// list databases
-	
+
 	result, ok, err := pgxspecial.ExecuteSpecialCommand(ctx, dbpool, "\\l")
 	if err != nil {
 		fmt.Println("error occured: ", err)
@@ -56,7 +55,6 @@ func main() {
 	// postgres | postgres | UTF8 | en_US.UTF-8 | en_US.UTF-8 | %!s(<nil>)
 	// template0 | postgres | UTF8 | en_US.UTF-8 | en_US.UTF-8 | =c/postgres
 	// template1 | postgres | UTF8 | en_US.UTF-8 | en_US.UTF-8 | =c/postgres
-
 
 	// list database with verbose
 
@@ -95,8 +93,6 @@ func main() {
 	// postgres=CTc/postgres | 7521 kB | pg_default | unmodifiable empty database
 	// template1 | postgres | UTF8 | en_US.UTF-8 | en_US.UTF-8 | =c/postgres
 	// postgres=CTc/postgres | 7750 kB | pg_default | default template for new databases
-
-
 
 	// list database with pattern
 	// here the pattern is tem* which will match template0 and template1
