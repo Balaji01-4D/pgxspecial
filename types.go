@@ -88,6 +88,15 @@ type DescribeTableResult struct {
 	TableMetaData TableFooterMeta
 }
 
-func (r *DescribeTableResult) ResultKind() SpecialResultKind {
+func (DescribeTableResult) ResultKind() SpecialResultKind {
+	return ResultKindDescribeTable
+}
+
+
+type DescribeTableListResult struct {
+	Results []DescribeTableResult
+}
+
+func (DescribeTableListResult) ResultKind() SpecialResultKind {
 	return ResultKindDescribeTable
 }
