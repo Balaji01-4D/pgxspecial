@@ -22,7 +22,7 @@ func main() {
 
 	// list databases
 	
-	rows, ok, err := pgxspecial.ExecuteSpecialCommand(ctx, dbpool, "\\l")
+	result, ok, err := pgxspecial.ExecuteSpecialCommand(ctx, dbpool, "\\l")
 	if err != nil {
 		fmt.Println("error occured: ", err)
 		panic(err)
@@ -30,6 +30,11 @@ func main() {
 	if !ok {
 		panic("command did not execute successfully")
 	}
+	if result.ResultKind() != pgxspecial.ResultKindRows {
+		panic("expected rows result")
+	}
+
+	rows := result.(pgxspecial.RowResult).Rows
 
 	columns := rows.FieldDescriptions()
 	for _, col := range columns {
@@ -55,7 +60,7 @@ func main() {
 
 	// list database with verbose
 
-	rows, ok, err = pgxspecial.ExecuteSpecialCommand(ctx, dbpool, "\\l+")
+	verboseResult, ok, err := pgxspecial.ExecuteSpecialCommand(ctx, dbpool, "\\l+")
 	if err != nil {
 		fmt.Println("error occured: ", err)
 		panic(err)
@@ -63,6 +68,11 @@ func main() {
 	if !ok {
 		panic("command did not execute successfully")
 	}
+	if verboseResult.ResultKind() != pgxspecial.ResultKindRows {
+		panic("expected rows result")
+	}
+
+	rows = verboseResult.(pgxspecial.RowResult).Rows
 
 	columns = rows.FieldDescriptions()
 	for _, col := range columns {
@@ -91,7 +101,7 @@ func main() {
 	// list database with pattern
 	// here the pattern is tem* which will match template0 and template1
 
-	rows, ok, err = pgxspecial.ExecuteSpecialCommand(ctx, dbpool, "\\l tem*")
+	patternResult, ok, err := pgxspecial.ExecuteSpecialCommand(ctx, dbpool, "\\l tem*")
 	if err != nil {
 		fmt.Println("error occured: ", err)
 		panic(err)
@@ -99,6 +109,11 @@ func main() {
 	if !ok {
 		panic("command did not execute successfully")
 	}
+	if patternResult.ResultKind() != pgxspecial.ResultKindRows {
+		panic("expected rows result")
+	}
+
+	rows = patternResult.(pgxspecial.RowResult).Rows
 
 	columns = rows.FieldDescriptions()
 	for _, col := range columns {
