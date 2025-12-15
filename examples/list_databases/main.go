@@ -13,7 +13,7 @@ func main() {
 	// This example demonstrates how to list all databases in a PostgreSQL server using the pgx library.
 
 	ctx := context.Background()
-	dbpool, err := pgxpool.New(ctx, "postgres://balaji:balaji2005@localhost:5432/postgres")
+	dbpool, err := pgxpool.New(ctx, "postgres://user:password@localhost:5432/postgres")
 	if err != nil {
 		panic(err)
 	}
