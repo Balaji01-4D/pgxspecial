@@ -9,6 +9,16 @@ import (
 	"github.com/balaji01-4d/pgxspecial/database"
 )
 
+func init() {
+	pgxspecial.RegisterCommand(pgxspecial.SpecialCommandRegistry{
+		Cmd: "\\dD",
+		Syntax: "\\dD[+] [pattern]",
+		Description: "List or describe domains.",
+		CaseSensitive: true,
+		Handler: ListDomains,
+	})
+}
+
 func ListDomains(ctx context.Context, db database.Queryer, pattern string, verbose bool) (pgxspecial.SpecialCommandResult, error) {
 	var sb strings.Builder
 	args := []any{}
