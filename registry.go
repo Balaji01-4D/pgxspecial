@@ -59,7 +59,9 @@ func RegisterCommand(cmdRegistry SpecialCommandRegistry) {
 
 // ExecuteSpecialCommand parses and executes a special command using the command registry.
 // Syntax: \command[+] [args]
+//
 // \command - actual special command
+//
 // \command[+] - actual special command with verbose mode
 //
 // A special command is identified by a leading backslash (`\`). If the input does not
@@ -73,7 +75,7 @@ func RegisterCommand(cmdRegistry SpecialCommandRegistry) {
 //
 // The provided Queryer is used by the command handler to execute any required queries.
 // Return values:
-//   - pgx.Rows: the result returned by the command handler, if any
+//   - SpecialCommandResult: the result returned by the command handler, if any
 //   - bool: true if the input was recognized as a special command, even if execution failed
 //   - error: non-nil if the command is unknown or execution fails
 //

@@ -37,9 +37,14 @@ type SpecialCommandRegistry struct {
 }
 
 type SpecialCommandResult interface {
+	// ResultKind indicates the kind of special result.
 	ResultKind() SpecialResultKind
 }
 
+// RowResult is a wrapper around pgx.Rows to implement SpecialCommandResult.
+// It is used for commands that return a set of rows.
+// For example, \dt to list tables.
+// The caller is responsible for closing the Rows when done.
 type RowResult struct {
 	Rows pgx.Rows
 }
@@ -48,6 +53,9 @@ func (r RowResult) ResultKind() SpecialResultKind {
 	return ResultKindRows
 }
 
+// TableFooterMeta holds the metadata found at the footer of a \d table description
+// this is not used in any return types directly, but is embedded in
+// DescribeTableResult.
 type TableFooterMeta struct {
 	Indexes          []string // lines under "Indexes:"
 	CheckConstraints []string // "Check constraints:"
@@ -82,17 +90,21 @@ type TableFooterMeta struct {
 	OwnedBy            *string  // "Owned by:" (sequences)
 }
 
+
 // DescribeTableResult holds the result of a describe table command.
+// this is not used in any return types directly, but is embedded in
+// DescribeTableListResult.
+//
+// syntax: \d table_name
 type DescribeTableResult struct {
 	Columns       []string
 	Data          [][]string
 	TableMetaData TableFooterMeta
 }
 
-func (DescribeTableResult) ResultKind() SpecialResultKind {
-	return ResultKindDescribeTable
-}
 
+// DescribeTableListResult holds multiple DescribeTableResult entries.
+// This is used when multiple tables are described in a single command.
 type DescribeTableListResult struct {
 	Results []DescribeTableResult
 }
@@ -101,11 +113,19 @@ func (DescribeTableListResult) ResultKind() SpecialResultKind {
 	return ResultKindDescribeTable
 }
 
+// ExtensionVerboseResult holds the result of a single extension verbose command.
+// This is not used in any return types directly, but is embedded in
+// ExtensionVerboseListResult.
 type ExtensionVerboseResult struct {
 	Name        string
 	Description []string
 }
 
+
+// ExtensionVerboseListResult holds multiple ExtensionVerboseResult entries.
+// This is used when multiple extensions are described in a single command.
+//
+// syntax: \dx+ extension_pattern**
 type ExtensionVerboseListResult struct {
 	Results []ExtensionVerboseResult
 }
